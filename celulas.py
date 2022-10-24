@@ -3,17 +3,15 @@ class celulas:
 
         #misturar a classe grid e a classe da propria sala? Fazer em ordem de prioridade
 
-        self.id     #'nome' da celula na grid, vai de 1 a 147, mas 12 são bloqueadas
-        self.bloqueada  #essa indica se a celula se encontra totalmente dentro da terra
-        self.pedra  #avisa se deve aparecer uma pedra no meio da celula
-        self.vazio  #indica se atualmente esta construido algo nela
-        self.pretendente    #indica se ela esta liberada pra ser construida
-        self.tipo   #indica qual a sala que esta construida
-        self.situacao   #indica qual a imagem deve ser usada, ex: se é da ponta esquerda, ou tem duas ao redor
-        self.coordenadas    #indica quais as coordenadas seriam o (0,0) dessa celula
-        self.consumo    #indica qual o consumo de energia dessa celula
-
-
+        self.id = id     #'nome' da celula na grid, vai de 1 a 147, mas 12 são bloqueadas
+        self.bloqueada = bloqueada  #essa indica se a celula se encontra totalmente dentro da terra
+        self.pedra = pedra  #avisa se deve aparecer uma pedra no meio da celula
+        self.vazio = vazio  #indica se atualmente esta construido algo nela
+        self.pretendente = pretendente    #indica se ela esta liberada pra ser construida
+        self.tipo = tipo   #indica qual a sala que esta construida
+        self.situacao = situacao   #indica qual a imagem deve ser usada, ex: se é da ponta esquerda, ou tem duas ao redor
+        self.coordenadas = coordenadas    #indica quais as coordenadas seriam o (0,0) dessa celula
+        self.consumo = consumo    #indica qual o consumo de energia dessa celula
 
 
 #import random
@@ -35,11 +33,11 @@ for _ in range(15):
         else:
             parar = True
     
-    aleatorios.append = (value)
+    aleatorios.append(value)
 
 parar = False
 
-id = 1
+ide = 1
 bloqueada = False
 pedra = False
 coordenadas = None
@@ -50,27 +48,34 @@ consumo = None
 pretendente = None
 
 while parar == False:
-
-    if (value >=1 and value <= 7) or (value >=22 and value <= 26):
+    
+    if (ide >=1 and ide <= 7) or (ide >=22 and ide <= 26):
         bloqueada = True
     else:
         bloqueada = False
         vazio = True
         consumo = 0
         pretendente = False
-        a = id // 21 #a coordenada no eixo y
-        b = id % 21 #a coordenada no eixo x
-        a = (a-1) * 51
-        b = b * 93
-        coordenadas = a, b
+        a = ide // (21+1) #representa o i na matriz
+        b = (ide-1) % 21 #representa o j na matriz
+        b = b * 51 #o j na matriz representa a largura
+        a = a * 93 #o i na matriz representa a altura
+        coordenadas = b, a
     
-    if id in aleatorios:
+    if ide in aleatorios:
         pedra = True
     else:
         pedra = False
+    
+    lista.append(celulas(ide,bloqueada,coordenadas,vazio,tipo,situacao,consumo,pedra,pretendente))
 
-    lista.append(celulas(id,bloqueada,coordenadas,vazio,tipo,situacao,consumo,pedra,pretendente))
-
-    id += 1
-    if id > 147:
+    ide += 1
+    if ide > 147:
         parar = True
+
+
+#testando
+contagem = 0
+while contagem < 146:
+    print(vars(lista[contagem]))
+    contagem += 1
