@@ -9,9 +9,17 @@ class celulas:
         self.vazio = vazio  #indica se atualmente esta construido algo nela
         self.pretendente = pretendente    #indica se ela esta liberada pra ser construida
         self.tipo = tipo   #indica qual a sala que esta construida
+        #level?
         self.situacao = situacao   #indica qual a imagem deve ser usada, ex: se é da ponta esquerda, ou tem duas ao redor
+
         self.coordenadas = coordenadas    #indica quais as coordenadas seriam o (0,0) dessa celula
         self.consumo = consumo    #indica qual o consumo de energia dessa celula
+        #vizinhos? ajudaria a demarcar os pretendentes
+        #direções de passagem
+        #indicar que esta fundido
+
+
+        #situacao, poderia ser ja o nome da imagem a ser usada como string, pra enviar no blip inves de fazer varios ifs
 
 
 #import random
@@ -73,9 +81,53 @@ while parar == False:
     if ide > 147:
         parar = True
 
+#essa parte é a que muda dependendo da dificuldade
+
+dificil = 26
+while dificil >= 26 and dificil <= 30:
+
+    lista[dificil].pedra = False
+    lista[dificil].vazio = False
+    lista[dificil].tipo = "porta"   #lembrando que a porta e indestrutivel
+    lista[dificil].consumo = 100 #ainda em testes esse valor
+    dificil += 1
+
+lista[26].situacao = "PE" #ponta esquerda
+lista[27].situacao = "M1" #meio 1
+lista[28].situacao = "M2"
+lista[29].situacao = "PD"
+
+lista[30].tipo = "elevador"
+lista[30].consumo = 20
+lista[30].situacao = "ND" #ele nao tem imagens diferentes pra celulas diferentes
+
+if lista[30-21].pedra == False:     #quando quebra uma pedra é preciso checar se se torna pretendente
+    lista[30-21].pretendente = True
+if lista[30+21].pedra == False:
+    lista[30+21].pretendente = True
+
+dificil = 31
+while dificil >= 31 and dificil <= 36:
+    lista[dificil].pedra = False
+    lista[dificil].vazio = False
+    lista[dificil].tipo = "quarto"
+    lista[dificil].consumo = 150
+    dificil += 1
+
+lista[31].situacao = "PE"
+lista[32].situacao = "M1"
+lista[33].situacao = "M2"
+lista[34].situacao = "M3"
+lista[35].situacao = "M4"
+lista[36].situacao = "PD"
+
+if lista[37].pedra == False:
+    lista[37].pretendente = True
+
+
 
 #testando
 contagem = 0
-while contagem < 146:
+while contagem < 147:
     print(vars(lista[contagem]))
     contagem += 1
