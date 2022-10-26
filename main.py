@@ -14,8 +14,8 @@ tamanho = largura, altura = 1071, 651
 janela = pygame.display.set_mode(tamanho)
 
 foto = pygame.image.load(path.join('cenario', 'dia.png'))
-pedra = pygame.image.load(path.join('cenario', 'pedra.png'))
-elevador = pygame.image.load(path.join('cenario', 'elevador.png'))
+#pedra = pygame.image.load(path.join('cenario', 'pedra.png'))
+#elevador = pygame.image.load(path.join('cenario', 'elevador.png'))
 
 
 coordenadas = w, z = 0, 0
@@ -43,15 +43,18 @@ while True:
 
     contagem = 0
     while contagem < 147:
-        if celulas.lista[contagem].pedra == True:
-            janela.blit(pedra, celulas.lista[contagem].coordenadas)
-        else:
-            if celulas.lista[contagem].vazio != None:
+        if celulas.lista[contagem].obj != None:
+            janela.blit(celulas.lista[contagem].obj,celulas.lista[contagem].coordenadas)
+
+        #if celulas.lista[contagem].pedra == True:
+            #janela.blit(pedra, celulas.lista[contagem].coordenadas)
+        #else:
+            #if celulas.lista[contagem].vazio != None:
                 
 
                 #teste
-                if celulas.lista[contagem].tipo == "elevador":
-                    janela.blit(elevador, celulas.lista[contagem].coordenadas)
+                #if celulas.lista[contagem].tipo == "elevador":
+                    #janela.blit(elevador, celulas.lista[contagem].coordenadas)
         contagem += 1
 
 
