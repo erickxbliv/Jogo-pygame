@@ -1,14 +1,22 @@
 import pygame
 import sys
 import celulas
+from os import path
+import menu
+
 pygame.init()
+
+def animacao():
+    pass
+
 
 tamanho = largura, altura = 1071, 651
 janela = pygame.display.set_mode(tamanho)
 
-foto = pygame.image.load("dia.png")
-pedra = pygame.image.load("pedra.png")
-elevador = pygame.image.load("elevador.png")
+foto = pygame.image.load(path.join('cenario', 'dia.png'))
+pedra = pygame.image.load(path.join('cenario', 'pedra.png'))
+elevador = pygame.image.load(path.join('cenario', 'elevador.png'))
+
 
 coordenadas = w, z = 0, 0
 preto = 0, 0, 0
@@ -23,11 +31,14 @@ while True:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+            #print(pos)
 
 
     janela.fill(preto)
     janela.blit(foto, (0,0))
-    pygame.display.flip()
+    #pygame.display.flip()
 
 
     contagem = 0
@@ -42,6 +53,11 @@ while True:
                 if celulas.lista[contagem].tipo == "elevador":
                     janela.blit(elevador, celulas.lista[contagem].coordenadas)
         contagem += 1
+
+
+    
+   
+        
 
 
 

@@ -1,35 +1,41 @@
+#a dificuldade deve mudar alguns conceitos aqui
+#carregar um save deve mudar muito o que acontece aqui
+
 class celulas:
-    def __init__(self, id, bloqueada, coordenadas, vazio, tipo, situacao, consumo, pedra, pretendente):
+    def __init__(self, id, bloqueada, coordenadas, vazio, tipo, situacao, consumo, pedra, pretendente,lvl):
 
-        #misturar a classe grid e a classe da propria sala? Fazer em ordem de prioridade
-
+        #Fazer em ordem de prioridade
         self.id = id     #'nome' da celula na grid, vai de 1 a 147, mas 12 são bloqueadas
         self.bloqueada = bloqueada  #essa indica se a celula se encontra totalmente dentro da terra
         self.pedra = pedra  #avisa se deve aparecer uma pedra no meio da celula
         self.vazio = vazio  #indica se atualmente esta construido algo nela
         self.pretendente = pretendente    #indica se ela esta liberada pra ser construida
         self.tipo = tipo   #indica qual a sala que esta construida
-        #level?
+        self.lvl = lvl
         self.situacao = situacao   #indica qual a imagem deve ser usada, ex: se é da ponta esquerda, ou tem duas ao redor
 
         self.coordenadas = coordenadas    #indica quais as coordenadas seriam o (0,0) dessa celula
         self.consumo = consumo    #indica qual o consumo de energia dessa celula
+
         #vizinhos? ajudaria a demarcar os pretendentes
         #direções de passagem
         #indicar que esta fundido
+        #misturar a classe grid e a classe da propria sala? um objeto pra o tipo da sala dentro da celula?
 
+    def imagem(self, tipo, lvl, situacao):
+        imagem = (tipo + lvl + situacao + ".png")
+        return imagem
+        
+#agora vai haver essa funcao pra formar o nome da imagem, pra poder carrega-la
 
-        #situacao, poderia ser ja o nome da imagem a ser usada como string, pra enviar no blip inves de fazer varios ifs
-
-
-#import random
 from random import seed
 from random import randint
 
 aleatorios = []
 lista = []
+seed()
 
-seed(1)
+#aleatorizar quais celulas terao pedras
 
 for _ in range(15):
     parar = False
@@ -43,6 +49,8 @@ for _ in range(15):
     
     aleatorios.append(value)
 
+#preencher celulas com dados genericos
+
 parar = False
 
 ide = 1
@@ -54,6 +62,7 @@ tipo = None
 situacao = None
 consumo = None
 pretendente = None
+lvl = None
 
 while parar == False:
     
@@ -75,58 +84,58 @@ while parar == False:
     else:
         pedra = False
     
-    lista.append(celulas(ide,bloqueada,coordenadas,vazio,tipo,situacao,consumo,pedra,pretendente))
+    lista.append(celulas(ide,bloqueada,coordenadas,vazio,tipo,situacao,consumo,pedra,pretendente,lvl))
 
     ide += 1
-    if ide > 147:
-        parar = True
+    if ide > 147: parar = True
 
-#essa parte é a que muda dependendo da dificuldade
+#a partir aqui vamos preencher os dados corretos pra porta, quarto e elevador que vem de padrão
 
-dificil = 26
-while dificil >= 26 and dificil <= 30:
+entrada = 26
+while entrada >= 26 and entrada <= 30:
 
-    lista[dificil].pedra = False
-    lista[dificil].vazio = False
-    lista[dificil].tipo = "porta"   #lembrando que a porta e indestrutivel
-    lista[dificil].consumo = 100 #ainda em testes esse valor
-    dificil += 1
+    lista[entrada].pedra = False
+    lista[entrada].vazio = False
+    lista[entrada].tipo = "porta"   #lembrando que a porta e indestrutivel
+    lista[entrada].consumo = 25 #ainda em testes esse valor, mas lembrando que aqui corresponde a uma celula sozinha
+    lista[entrada].lvl = 1
+    entrada += 1
 
-lista[26].situacao = "PE" #ponta esquerda
-lista[27].situacao = "M1" #meio 1
-lista[28].situacao = "M2"
-lista[29].situacao = "PD"
+lista[26].situacao = "_1"   #nao ha o denominador porque so existe uma maneira de organizar a porta
+lista[27].situacao = "_2"
+lista[28].situacao = "_3"
+lista[29].situacao = "_4"
 
 lista[30].tipo = "elevador"
 lista[30].consumo = 20
-lista[30].situacao = "ND" #ele nao tem imagens diferentes pra celulas diferentes
+lista[30].situacao = "_0" #ele nao tem imagens diferentes
+lista[30].lvl = 0
 
 if lista[30-21].pedra == False:     #quando quebra uma pedra é preciso checar se se torna pretendente
     lista[30-21].pretendente = True
 if lista[30+21].pedra == False:
     lista[30+21].pretendente = True
 
-dificil = 31
-while dificil >= 31 and dificil <= 36:
-    lista[dificil].pedra = False
-    lista[dificil].vazio = False
-    lista[dificil].tipo = "quarto"
-    lista[dificil].consumo = 150
-    dificil += 1
+quartos = 31
+while quartos >= 31 and quartos <= 36:
+    lista[quartos].pedra = False
+    lista[quartos].vazio = False
+    lista[quartos].tipo = "quarto"
+    lista[quartos].consumo = 150
+    lista[quartos].lvl = 2
+    quartos += 1
 
-lista[31].situacao = "PE"
-lista[32].situacao = "M1"
-lista[33].situacao = "M2"
-lista[34].situacao = "M3"
-lista[35].situacao = "M4"
-lista[36].situacao = "PD"
+lista[31].situacao = "_1/6" #esse quarto esja junto a outros 5
+lista[32].situacao = "_2/6"
+lista[33].situacao = "_3/6"
+lista[34].situacao = "_4/6"
+lista[35].situacao = "_5/6"
+lista[36].situacao = "_6/6"
 
 if lista[37].pedra == False:
     lista[37].pretendente = True
 
-
-
-#testando
+#visualizar o que ha na lista dos objetetos (lista de todas as celulas)
 contagem = 0
 while contagem < 147:
     print(vars(lista[contagem]))
