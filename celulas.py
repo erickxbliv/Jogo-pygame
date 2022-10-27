@@ -82,7 +82,7 @@ while parar == False:
         vazio = True
         consumo = 0
         pretendente = False
-        a = ide // (21+1) #representa o i na matriz
+        a = ((ide-1) // 21) #representa o i na matriz
         b = (ide-1) % 21 #representa o j na matriz
         b = b * 51 #o j na matriz representa a largura
         a = a * 93 #o i na matriz representa a altura
