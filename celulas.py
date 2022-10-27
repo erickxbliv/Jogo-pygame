@@ -2,6 +2,7 @@ import pygame
 from os import path
 from random import seed
 from random import randint
+import menu
 
 #a dificuldade deve mudar alguns conceitos aqui
 #carregar um save deve mudar muito o que acontece aqui
@@ -39,6 +40,8 @@ class celulas:
             else: self.obj = None
         
 #agora vai haver essa funcao pra formar o nome da imagem, pra poder carrega-la
+
+menu.menu()
 
 aleatorios = []
 lista = []
@@ -81,7 +84,7 @@ while parar == False:
         bloqueada = False
         vazio = True
         consumo = 0
-        pretendente = False
+        pretendente = "nenhuma"
         a = ((ide-1) // 21) #representa o i na matriz
         b = (ide-1) % 21 #representa o j na matriz
         b = b * 51 #o j na matriz representa a largura
@@ -121,9 +124,9 @@ lista[30].situacao = "_0" #ele nao tem imagens diferentes
 lista[30].lvl = '0'
 
 if lista[30-21].pedra == False:     #quando quebra uma pedra é preciso checar se se torna pretendente
-    lista[30-21].pretendente = True
+    lista[30-21].pretendente = "vertical"
 if lista[30+21].pedra == False:
-    lista[30+21].pretendente = True
+    lista[30+21].pretendente = "vertical"
 
 quartos = 31
 while quartos >= 31 and quartos <= 36:
@@ -142,7 +145,7 @@ lista[35].situacao = "_5-6"
 lista[36].situacao = "_6-6"
 
 if lista[37].pedra == False:
-    lista[37].pretendente = True
+    lista[37].pretendente = "total"
 
 #teste pra visualizar o que ha na lista dos objetos (lista de todas as celulas) e criar seus objetos
 contagem = 0
