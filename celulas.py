@@ -149,5 +149,5 @@ contagem = 0
 while contagem < 147:
 
     lista[contagem].imagem()
-    #print(vars(lista[contagem]))
+    print(vars(lista[contagem])) #teste
     contagem += 1
