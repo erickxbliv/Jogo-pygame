@@ -16,7 +16,7 @@ janela = pygame.display.set_mode(tamanho)
 
 fundo = pygame.image.load(path.join('cenario', 'dia.png'))
 #fundo_noite = pygame.image.load(path.join('cenario', 'noite.png'))
-configuracoes = pygame.image.load("configuracoes.png")   #pode ficar "alocado" na celula 1 (0,0), e assim se sabe se foi aberta. 
+#configuracoes = pygame.image.load("configuracoes.png")   #pode ficar "alocado" na celula 1 (0,0), e assim se sabe se foi aberta. 
 
 #sera se compensava eu ter os dados do jogo numa classe?
 coordenadas = w, z = 0, 0
@@ -74,7 +74,7 @@ while True:
 
     janela.fill(preto)
     janela.blit(fundo, (0,0))
-    janela.blit(configuracoes,(0,0))
+    #janela.blit(configuracoes,(0,0))
 
     contagem = 0
     while contagem < 147:

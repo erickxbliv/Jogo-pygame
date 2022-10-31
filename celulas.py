@@ -31,6 +31,7 @@ class celulas:
     
     #def imagem(self, obj, tipo, lvl, situacao, pedra, vazio):
     def imagem(self):
+
         if self.pedra == True:
             self.obj = pygame.image.load(path.join('cenario', 'pedra.png'))
         else:
@@ -38,6 +39,9 @@ class celulas:
                 imagem = (self.tipo + self.lvl + self.situacao + ".png")
                 self.obj = pygame.image.load(path.join('cenario', imagem))
             else: self.obj = None
+
+        if self.id == 1: self.obj = pygame.image.load(path.join('sistema', 'configuracoes.png'))   #teste
+
         
 #agora vai haver essa funcao pra formar o nome da imagem, pra poder carrega-la
 
@@ -100,6 +104,10 @@ while parar == False:
 
     ide += 1
     if ide > 147: parar = True
+
+lista[0].coordenadas = (0,0)
+lista[0].imagem()
+#lista[0].obj = pygame.image.load(path.join('sistema', 'configuracoes.png'))
 
 #a partir aqui vamos preencher os dados corretos pra porta, quarto e elevador que vem de padrão
 
