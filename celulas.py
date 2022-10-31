@@ -2,7 +2,7 @@ import pygame
 from os import path
 from random import seed
 from random import randint
-import menu
+#import menu
 
 #a dificuldade deve mudar alguns conceitos aqui
 #carregar um save deve mudar muito o que acontece aqui
@@ -45,7 +45,7 @@ class celulas:
         
 #agora vai haver essa funcao pra formar o nome da imagem, pra poder carrega-la
 
-menu.menu()
+#menu.menu()
 
 aleatorios = []
 lista = []

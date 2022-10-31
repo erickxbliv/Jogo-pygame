@@ -1,13 +1,14 @@
 import pygame
+pygame.init()
 import sys
 import celulas
 from os import path
 import funcoes
+import menu
 
-pygame.init()
+menu.menu()
 
-def animacao():
-    pass
+
 
 #compensa mais não mostrar a pretendencia quando se tem pedra, do que ter uma função pra atualizar as pedras quebradas e outra pra 
 
