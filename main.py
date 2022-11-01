@@ -1,12 +1,17 @@
 import pygame
 pygame.init()
 import sys
-import celulas
 from os import path
+
+import celulas
 import funcoes
 import menu
+import blueprint
 
 menu.menu()
+
+if menu.teste.carregar == False:
+    blueprint.iniciar_generico(celulas.lista,menu.teste.dificuldade,menu.teste.posicao,menu.teste.nome)
 
 
 

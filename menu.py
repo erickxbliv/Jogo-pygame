@@ -27,18 +27,25 @@ def menu():
     tamanho = largura, altura = 1071, 651
     janela = pygame.display.set_mode(tamanho)
 
-    dados.zerar()
+    #dados.zerar() ?????
     animacao()
+
     #opcoes: iniciar novo jogo, carregar jogo, manual, opcoes ou sair
     #se escolher iniciar jogo, pergunta posicao, nome do save e dificuldade
         #volta pra main e chama a funcao criar generico (depende dif.), assim salvando num arquivo naquela posicao e com aquele nome
 
-    dados.posicao = "1"
-    dados.nome = "erick"
-    dados.dificuldade = "facil"
-    dados.carregar = False
-    return
+    #criar aqui o objeto da classe dados
+    
+    posicao = "1"
+    nome = "erick"
+    dificuldade = "facil"
+    carregar = False
 
+    global teste
+
+    teste = dados(dificuldade,carregar,posicao,nome)
+    
+    #return
 
 
 #fazer aqui todo e qualquer menu, qualquer icone verdinho que representar uma função era bom ficar aqui
