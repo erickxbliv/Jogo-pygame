@@ -22,12 +22,10 @@ def animacao():
 
 
 
-def menu():
+def menu(jogo):
 
-    tamanho = largura, altura = 1071, 651
-    janela = pygame.display.set_mode(tamanho)
 
-    #dados.zerar() ?????
+    #dados.zerar(self)
     animacao()
 
     #opcoes: iniciar novo jogo, carregar jogo, manual, opcoes ou sair
@@ -41,9 +39,7 @@ def menu():
     dificuldade = "facil"
     carregar = False
 
-    global teste
-
-    teste = dados(dificuldade,carregar,posicao,nome)
+    jogo.dados = dados(dificuldade,carregar,posicao,nome)
     
     #return
 

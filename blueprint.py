@@ -1,16 +1,20 @@
-import pygame
 from os import path
 from random import seed
 from random import randint
 
-def iniciar_generico(lista, dificuldade, posicao, nome):
+def salvar():
+    pass
+
+
+
+def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo o jogo? Pq aqui que vai ser salvo ne
 
     aleatorios = []
     seed()
     #aleatorizar quais celulas terao pedras
 
-    if dificuldade == "facil": quantidade_pedras = 15
-    elif dificuldade == "dificil": quantidade_pedras = 30
+    if dados.dificuldade == "facil": quantidade_pedras = 15
+    elif dados.dificuldade == "dificil": quantidade_pedras = 30
 
     for _ in range(quantidade_pedras):
         parar = False
@@ -94,8 +98,8 @@ def iniciar_generico(lista, dificuldade, posicao, nome):
         lista[quartos].tipo = "quarto"
         lista[quartos].consumo = 150
 
-        if dificuldade == "facil": lista[quartos].lvl = '2'
-        elif dificuldade == "dificil": lista[quartos].lvl = '1'
+        if dados.dificuldade == "facil": lista[quartos].lvl = '2'
+        elif dados.dificuldade == "dificil": lista[quartos].lvl = '1'
         quartos += 1
 
     lista[31].situacao = "_1-6" #esse quarto esja junto a outros 5
@@ -113,7 +117,8 @@ def iniciar_generico(lista, dificuldade, posicao, nome):
     while contagem < 147:
 
         lista[contagem].imagem()
-        print(vars(lista[contagem])) #teste
+        print(vars(lista[contagem]))            #teste
         contagem += 1
 
     #aqui salvar o arquivo
+    salvar()

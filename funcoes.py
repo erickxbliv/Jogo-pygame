@@ -1,3 +1,7 @@
+import pygame
+from os import path
+import sys
+
 def construir(lista):
 
     #receber como parametro se e um elevador, e se for uma sala, qual o tamanho dela
@@ -12,3 +16,44 @@ def construir(lista):
                 pass
 
 #animacao ficar aqui?
+
+
+def minerar(jogo, celula):        #n seria bom mandar so o objeto?
+
+    confirmacao = pygame.image.load(path.join('sistema', 'removerpedra.png'))
+    contorno = pygame.image.load(path.join('sistema', 'contorno1.png'))
+    erro  = pygame.image.load(path.join('sistema', 'naopode.png'))
+
+    #lista[pos_vetor]
+    jogo.janela.blit(contorno, celula.coordenadas)
+    jogo.janela.blit(confirmacao,(459,186))
+    pygame.display.flip()
+
+    while True:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+
+                position = pos_x, pos_y = pygame.mouse.get_pos()
+                if pos_y >= 372 and pos_y <= 465:
+                    if pos_x >= 510 and pos_x <= 560:
+                        return
+                    elif pos_x >= 612 and pos_x <= 663:
+                        preco = (((celula.id-1) // 21) * 50) + 50
+                        print(preco)
+                        if jogo.dinheiro < preco:
+                            jogo.janela.blit(erro,(459,186))
+                            pygame.display.flip()
+                        else:
+                            celula.pedra = False
+                            jogo.dinheiro = jogo.dinheiro - preco
+                            return
+            
+
+        
+
+
+
+
+

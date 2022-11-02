@@ -8,17 +8,35 @@ import funcoes
 import menu
 import blueprint
 
-menu.menu()
+class geral:
+    def __init__(self):
 
-if menu.teste.carregar == False:
-    blueprint.iniciar_generico(celulas.lista,menu.teste.dificuldade,menu.teste.posicao,menu.teste.nome)
+        self.janela = pygame.display.set_mode((1071,651))
+        self.dificuldade = None
+        self.carregar = None
+        self.dados = None
+        self.dinheiro = None
+
+    def menu(self):
+        pass
+
+
+jogo = geral()
+menu.menu(jogo)
+
+
+
+
+
+if jogo.dados.carregar == False:
+    blueprint.iniciar_generico(celulas.lista,jogo.dados)
+
+if jogo.dificuldade == "facil": jogo.dinheiro = 5000
+else: jogo.dinheiro = 2000
 
 
 
 #compensa mais não mostrar a pretendencia quando se tem pedra, do que ter uma função pra atualizar as pedras quebradas e outra pra 
-
-tamanho = largura, altura = 1071, 651
-janela = pygame.display.set_mode(tamanho)
 
 fundo = pygame.image.load(path.join('cenario', 'dia.png'))
 #fundo_noite = pygame.image.load(path.join('cenario', 'noite.png'))
@@ -33,7 +51,6 @@ sistema_atual = "espectador"        #modos: espectador - visualizar o bunker, co
 achei = False
 #clock tick
 
-matriz_grid = []
 lista = []
 
 while True:
@@ -57,17 +74,24 @@ while True:
                     else: achei = True
                 y = (y // 93) * 21
                 x = (x//51) + 1
-                pos_vetor = (x + y) - 1
+                pos_vetor = (x + y) - 1         #transformar isso numa funcao, achar o ide
 
                 #print(pos_vetor)
 
                 if celulas.lista[pos_vetor].pedra == True:
+                    funcoes.minerar(jogo, celulas.lista[pos_vetor])
+
+
+
+
+
+
                     #remocao = tirar_pedra()
-                    remocao = True
-                    if remocao == True:
-                        y = (y // 21) * 93  #pegando o y de volta, pois quanto mais embaixo mais caro
-                        dinheiro = dinheiro - ((y * 50) + 50)
-                        celulas.lista[pos_vetor].pedra = False
+                    #remocao = True
+                    #if remocao == True:
+                        #y = (y // 21) * 93  #pegando o y de volta, pois quanto mais embaixo mais caro
+                        #dinheiro = dinheiro - ((y * 50) + 50)
+                        #celulas.lista[pos_vetor].pedra = False
                         #atualizar_pretendencia_d1_celula(pos_vetor,lista)
 
                         #print(celulas.lista[pos_vetor].pedra)
@@ -78,15 +102,15 @@ while True:
                 funcoes.construir()
 
 
-    janela.fill(preto)
-    janela.blit(fundo, (0,0))
+    jogo.janela.fill(preto)
+    jogo.janela.blit(fundo, (0,0))
     #janela.blit(configuracoes,(0,0))
 
     contagem = 0
     while contagem < 147:
         celulas.lista[contagem].imagem()    #sera se tem problema atualizar toda santa vez as imagens?
         if celulas.lista[contagem].obj != None:
-            janela.blit(celulas.lista[contagem].obj,celulas.lista[contagem].coordenadas)
+            jogo.janela.blit(celulas.lista[contagem].obj,celulas.lista[contagem].coordenadas)
 
         contagem += 1
 

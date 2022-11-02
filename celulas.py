@@ -21,8 +21,7 @@ class celulas:
 
         self.coordenadas = coordenadas    #indica quais as coordenadas seriam o (0,0) dessa celula
         self.consumo = consumo   #indica qual o consumo de energia dessa celula
-        #self.obj = obj
-
+        #self.obj = None
         #vizinhos? ajudaria a demarcar os pretendentes
         #direções de passagem
         #indicar que esta fundido
@@ -31,15 +30,16 @@ class celulas:
     #def imagem(self, obj, tipo, lvl, situacao, pedra, vazio):
     def imagem(self):
 
-        if self.pedra == True:
-            self.obj = pygame.image.load(path.join('cenario', 'pedra.png'))
+        #if self.obj != None: return
+        #pedras aleatorias
+        if self.pedra == True: self.obj = pygame.image.load(path.join('cenario', 'pedra.png'))
         else:
             if self.vazio == False:
                 imagem = (self.tipo + self.lvl + self.situacao + ".png")
                 self.obj = pygame.image.load(path.join('cenario', imagem))
             else: self.obj = None
 
-        if self.id == 1: self.obj = pygame.image.load(path.join('sistema', 'configuracoes.png'))   #teste
+        if self.id == 1: self.obj = pygame.image.load(path.join('sistema', 'sistema.png'))   #teste
    
 #agora vai haver essa funcao pra formar o nome da imagem, pra poder carrega-la
 
