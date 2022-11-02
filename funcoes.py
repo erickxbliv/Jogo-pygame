@@ -53,7 +53,23 @@ def minerar(jogo, celula):        #n seria bom mandar so o objeto?
 
         
 
+def achar_celula(position):
 
+    pos_x, pos_y = position
+    x = 1020
+    y = 558
+    achei = False
+    while achei == False:
+        if pos_y < y: y -= 93
+        else: achei = True
+    achei = False
+    while achei == False:
+        if pos_x < x: x -= 51
+        else: achei = True
+    y = (y // 93) * 21
+    x = (x//51) + 1
+    pos_vetor = (x + y) - 1
+    return pos_vetor
 
 
 

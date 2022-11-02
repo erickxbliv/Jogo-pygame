@@ -39,6 +39,9 @@ def menu(jogo):
     dificuldade = "facil"
     carregar = False
 
+    if dificuldade == "facil": jogo.dinheiro = 5000
+    else: jogo.dinheiro = 2000
+
     jogo.dados = dados(dificuldade,carregar,posicao,nome)
     
     #return

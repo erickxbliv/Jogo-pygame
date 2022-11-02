@@ -32,7 +32,9 @@ class celulas:
 
         #if self.obj != None: return
         #pedras aleatorias
-        if self.pedra == True: self.obj = pygame.image.load(path.join('cenario', 'pedra.png'))
+        if self.pedra == True: 
+            alt = ((self.id-1) // 21)
+            self.obj = pygame.image.load(path.join('cenario', 'pedra' + str(alt) + '.png'))
         else:
             if self.vazio == False:
                 imagem = (self.tipo + self.lvl + self.situacao + ".png")

@@ -2,9 +2,16 @@ from os import path
 from random import seed
 from random import randint
 
-def salvar():
+#este modulo trabalha apenas quando um jogo é iniciado ou quando um jogo é salvo
+#se for novo, as celulas precisam ser preenchidas genericamente. Se carregado, ele lê os dados salvos.
+
+
+def salvar(lista, jogo):
     pass
 
+
+def carregar(lista, jogo):
+    pass
 
 
 def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo o jogo? Pq aqui que vai ser salvo ne
@@ -31,7 +38,7 @@ def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo
     #preencher celulas com dados genericos
 
     parar = False
-    ide = 1 #contador
+    ide = 1
 
     while parar == False:
         
@@ -62,7 +69,6 @@ def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo
 
     lista[0].coordenadas = (0,0)
     lista[0].imagem()
-    #lista[0].obj = pygame.image.load(path.join('sistema', 'configuracoes.png'))
 
     #a partir aqui vamos preencher os dados corretos pra porta, quarto e elevador que vem de padrão
 
@@ -72,7 +78,7 @@ def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo
         lista[entrada].pedra = False
         lista[entrada].vazio = False
         lista[entrada].tipo = "porta"   #lembrando que a porta e indestrutivel
-        lista[entrada].consumo = 25 #ainda em testes esse valor, mas lembrando que aqui corresponde a uma celula sozinha
+        lista[entrada].consumo = 25     #ainda em testes esse valor, mas lembrando que aqui corresponde a uma celula sozinha
         lista[entrada].lvl = '1'
         entrada += 1
 
@@ -119,6 +125,3 @@ def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo
         lista[contagem].imagem()
         print(vars(lista[contagem]))            #teste
         contagem += 1
-
-    #aqui salvar o arquivo
-    salvar()
