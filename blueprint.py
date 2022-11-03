@@ -82,14 +82,14 @@ def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo
         lista[entrada].lvl = '1'
         entrada += 1
 
-    lista[26].situacao = "_1"   #nao ha o denominador porque so existe uma maneira de organizar a porta
-    lista[27].situacao = "_2"
-    lista[28].situacao = "_3"
-    lista[29].situacao = "_4"
+    lista[26].situacao = "_1-4"   #nao ha o denominador porque so existe uma maneira de organizar a porta
+    lista[27].situacao = "_2-4"     #tive q colocar por causa do metodo q estou usando pra ver o tamanho da sala
+    lista[28].situacao = "_3-4"
+    lista[29].situacao = "_4-4"
 
     lista[30].tipo = "elevador"
     lista[30].consumo = 20
-    lista[30].situacao = "_0" #ele nao tem imagens diferentes
+    lista[30].situacao = "_1-1" #ele nao tem imagens diferentes
     lista[30].lvl = '0'
 
     if lista[30-21].pedra == False:     #quando quebra uma pedra é preciso checar se se torna pretendente

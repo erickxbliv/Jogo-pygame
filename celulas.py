@@ -2,6 +2,7 @@ import pygame
 from os import path
 from random import seed
 from random import randint
+import funcoes
 
 #a dificuldade deve mudar alguns conceitos aqui
 #carregar um save deve mudar muito o que acontece aqui
@@ -21,7 +22,9 @@ class celulas:
 
         self.coordenadas = coordenadas    #indica quais as coordenadas seriam o (0,0) dessa celula
         self.consumo = consumo   #indica qual o consumo de energia dessa celula
-        #self.obj = None
+        self.obj = None
+
+        self.sala = None
         #vizinhos? ajudaria a demarcar os pretendentes
         #direções de passagem
         #indicar que esta fundido
@@ -30,22 +33,30 @@ class celulas:
     #def imagem(self, obj, tipo, lvl, situacao, pedra, vazio):
     def imagem(self):
 
-        #if self.obj != None: return
+        #esse comando e pra evitar execucoes desnecessarias. Mas salas podem esvaziar..
+        if self.obj != None and (self.vazio == False or self.pedra == True): return     
+        
         #pedras aleatorias
         if self.pedra == True: 
-            alt = ((self.id-1) // 21)
-            self.obj = pygame.image.load(path.join('cenario', 'pedra' + str(alt) + '.png'))
+            altura = ((self.id-1) // 21)
+            self.obj = pygame.image.load(path.join('cenario', 'pedra' + str(altura) + '.png'))
         else:
             if self.vazio == False:
                 imagem = (self.tipo + self.lvl + self.situacao + ".png")
                 self.obj = pygame.image.load(path.join('cenario', imagem))
             else: self.obj = None
 
-        if self.id == 1: self.obj = pygame.image.load(path.join('sistema', 'sistema.png'))   #teste
+           #teste
    
-#agora vai haver essa funcao pra formar o nome da imagem, pra poder carrega-la
-
-#menu.menu()
+    def demolicao(self):
+        
+        self.vazio = True
+        self.pretendente = None #precisa chamar a funcao de pretendencia  
+        self.tipo = None
+        self.lvl = None
+        self.situacao = None
+        self.consumo = None
+        self.obj = None
 
 lista = []
 

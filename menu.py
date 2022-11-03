@@ -1,4 +1,7 @@
 import pygame
+from os import path
+import sys
+import funcoes
 
 class dados:
     def __init__(self, dificuldade, carregar, posicao, nome):
@@ -39,7 +42,7 @@ def menu(jogo):
     dificuldade = "facil"
     carregar = False
 
-    if dificuldade == "facil": jogo.dinheiro = 5000
+    if dificuldade == "facil": jogo.dinheiro = 2000     #quanto seria bom?
     else: jogo.dinheiro = 2000
 
     jogo.dados = dados(dificuldade,carregar,posicao,nome)
@@ -48,3 +51,32 @@ def menu(jogo):
 
 
 #fazer aqui todo e qualquer menu, qualquer icone verdinho que representar uma função era bom ficar aqui
+
+
+def sistema(jogo, lista):
+
+    licensa = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
+    subsistemas = pygame.image.load(path.join('sistema', 'subsistemas.png'))
+    jogo.janela.blit(licensa, (0,0))
+    jogo.janela.blit(subsistemas, (0,0))
+    pygame.display.flip()
+    while True:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                position = pos_x, pos_y = pygame.mouse.get_pos()
+                if pos_x <= 51:
+                    if pos_y < 93: return
+                    elif pos_y >= 93 and pos_y <= 372:
+                        if pos_y >= 93 and pos_y < 186: 
+                            jogo.modo = "construir"             #aqui vai pra funcao de escolher qual sala, e ai retorna total
+                            return
+                        if pos_y >= 186 and pos_y < 279:
+                            pass #abrir os moradores
+                        if pos_y >= 279 and pos_y <= 372:
+                            pass #abrir as configuracoes
+                    else: return
+
+                else: return
+
