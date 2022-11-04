@@ -2,22 +2,26 @@ import pygame
 from os import path
 import sys
 
-def construir(jogo, lista):
-    print("ola")
-    contorno = pygame.image.load(path.join('sistema', 'contorno1.png'))
+"""
+def construiveis(jogo, lista):
+    #print("ola")
+    contorno1 = pygame.image.load(path.join('sistema', 'contorno1.png'))
     #teste so pra colocar elevadores fingindo brincadeira
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
-        contagem = 0
-        while contagem < 147:
-            if lista[contagem].pretendente == "total" or lista[contagem].pretendente == "vertical": jogo.janela.blit(contorno,lista[contagem].coordenadas)
-            contagem += 1
+    #while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: sys.exit()
+    contagem = 0
+    while contagem < 147:
+        if jogo.construirtipo == "elevador":
+            if lista[contagem].pretendente == "total" or lista[contagem].pretendente == "vertical": 
+                jogo.janela.blit(contorno1,lista[contagem].coordenadas)
+        #um elif pra outro tipo q seja diferente de 2 celulas juntas, e um else pra 2
+        contagem += 1
 
-        pygame.display.flip()
+    #pygame.display.flip()
 
 #animacao ficar aqui?
-
+"""
 
 def minerar(jogo, celula):        #n seria bom mandar so o objeto?
 
@@ -73,21 +77,80 @@ def achar_celula(position):
 
 
 
-def pretendencia(lista, pos_vetor):
-    #se vier ide, so diminuir 1 pra ter o pos_vetor
-    if lista[pos_vetor].pedra == True or lista[pos_vetor].vazio == False: return
-    a = ((pos_vetor) // 21) #representa o i na matriz
-    b = (pos_vetor) % 21 #representa o j na matriz
+def pretendencia(lista, pos_vetor, demolicao):
+
+    if demolicao == True:   #se isso for verdade, quer dizer que uma celula foi demolida
+
+        #se vier ide, so diminuir 1 pra ter o pos_vetor
+        if lista[pos_vetor].pedra == True or lista[pos_vetor].vazio == False: return
+        a = ((pos_vetor) // 21) #representa o i na matriz
+        b = (pos_vetor) % 21 #representa o j na matriz
+        
+
+        lista[pos_vetor].pretendente = None
+        if a != 0:
+            if lista[pos_vetor-21].vazio == False: lista[pos_vetor].pretendente = "elevador"
+        if a != 6:
+            if lista[pos_vetor+21].vazio == False: lista[pos_vetor].pretendente = "elevador"
+        if b != 0:
+            if lista[pos_vetor-1].vazio == False: lista[pos_vetor].pretendente = "total"
+        if b != 20:
+            if lista[pos_vetor+1].vazio == False: lista[pos_vetor].pretendente = "total"
     
 
-    lista[pos_vetor].pretendente = None
-    if a != 0:
-        if lista[pos_vetor-21].vazio == False: lista[pos_vetor].pretendente = "elevador"
-    if a != 6:
-        if lista[pos_vetor+21].vazio == False: lista[pos_vetor].pretendente = "elevador"
-    if b != 0:
-        if lista[pos_vetor-1].vazio == False: lista[pos_vetor].pretendente = "total"
-    if b != 20:
-        if lista[pos_vetor+1].vazio == False: lista[pos_vetor].pretendente = "total"
+    else:
+        print("plim")
+        if lista[pos_vetor].vazio == False:
+            a = ((pos_vetor) // 21) #representa o i na matriz
+            b = (pos_vetor) % 21 #representa o j na matriz
+
+            if a != 0:
+                if lista[pos_vetor-21].vazio == True and lista[pos_vetor-21].pedra == False:
+                    if lista[pos_vetor].tipo == "elevador": lista[pos_vetor-21].pretendente == "vertical"
+            if a != 6:
+                if lista[pos_vetor+21].vazio == True and lista[pos_vetor+21].pedra == False:
+                    if lista[pos_vetor].tipo == "elevador": lista[pos_vetor+21].pretendente == "vertical"
+            if b != 0:
+                if lista[pos_vetor-1].vazio == True and lista[pos_vetor-1].pedra == False: lista[pos_vetor-1].pretendente == "total"
+            if b != 20:
+                if lista[pos_vetor+1].vazio == True and lista[pos_vetor+1].pedra == False: lista[pos_vetor+1].pretendente == "total"
 
 
+def erguer(celula,tipo):
+
+    if tipo == "elevador":
+        celula.vazio = False
+        celula.pretendente = False
+        celula.tipo = "elevador"
+        celula.lvl = "0"
+        celula.situacao = "_1-1"
+        celula.consumo = 20
+
+
+
+
+
+def animacao(jogo, lista, fundo, iconesistema):
+
+    preto = 0, 0, 0
+    jogo.janela.fill(preto)
+    jogo.janela.blit(fundo, (0,0))
+    jogo.janela.blit(iconesistema, (0,0))
+
+    if jogo.modo == "construir":
+        contorno1 = pygame.image.load(path.join('sistema', 'contorno1.png'))
+
+    contagem = 0
+    while contagem < 147:
+        lista[contagem].imagem()    #sera se tem problema atualizar toda santa vez as imagens?
+        if lista[contagem].obj != None:
+            jogo.janela.blit(lista[contagem].obj,lista[contagem].coordenadas)
+
+        if jogo.modo == "construir":
+            if jogo.construirtipo == "elevador":
+                if lista[contagem].pretendente == "total" or lista[contagem].pretendente == "vertical": 
+                    jogo.janela.blit(contorno1,lista[contagem].coordenadas)
+
+        contagem += 1
+
+    pygame.display.flip()
