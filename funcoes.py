@@ -1,9 +1,13 @@
 import pygame
+from pygame import mixer
+mixer.init()
+pygame.init()
+
 from os import path
 import sys
 
 
-def animacao(jogo, lista):
+def animacao(jogo, lista, flipar):
 
     preto = 0, 0, 0
     jogo.janela.fill(preto)
@@ -11,7 +15,7 @@ def animacao(jogo, lista):
     jogo.janela.blit(jogo.iconesistema, (0,0))
 
     if jogo.modo == "construir":
-        contorno1 = pygame.image.load(path.join('sistema', 'contorno1.png'))
+        contorno1 = pygame.image.load(path.join('sistema', 'constrorno1.png'))
 
     contagem = 0
     while contagem < 147:
@@ -26,7 +30,7 @@ def animacao(jogo, lista):
 
         contagem += 1
 
-    pygame.display.flip()
+    if flipar == True: pygame.display.flip()
 
 
 def minerar(jogo, celula):        #n seria bom mandar so o objeto?
@@ -57,6 +61,8 @@ def minerar(jogo, celula):        #n seria bom mandar so o objeto?
                         else:
                             celula.pedra = False
                             jogo.dinheiro = jogo.dinheiro - preco
+                            sucesso =  pygame.mixer.Sound(path.join('sons','minerar.wav'))
+                            pygame.mixer.Sound.play(sucesso)
                             return
             
         
@@ -91,9 +97,9 @@ def pretendencia(lista, pos_vetor, demolicao):
 
         lista[pos_vetor].pretendente = None
         if a != 0:
-            if lista[pos_vetor-21].vazio == False: lista[pos_vetor].pretendente = "elevador"
+            if not lista[pos_vetor-21].vazio and lista[pos_vetor-21].tipo == "elevador": lista[pos_vetor].pretendente = "vertical"
         if a != 6:
-            if lista[pos_vetor+21].vazio == False: lista[pos_vetor].pretendente = "elevador"
+            if not lista[pos_vetor+21].vazio and lista[pos_vetor+21].tipo == "elevador": lista[pos_vetor].pretendente = "vertical"
         if b != 0:
             if lista[pos_vetor-1].vazio == False: lista[pos_vetor].pretendente = "total"
         if b != 20:
@@ -101,30 +107,69 @@ def pretendencia(lista, pos_vetor, demolicao):
     
 
     else:
-        print("plim")
+        #print("plim")
         if lista[pos_vetor].vazio == False:
             a = ((pos_vetor) // 21) #representa o i na matriz
             b = (pos_vetor) % 21 #representa o j na matriz
 
             if a != 0:
                 if lista[pos_vetor-21].vazio == True and lista[pos_vetor-21].pedra == False:
-                    if lista[pos_vetor].tipo == "elevador": lista[pos_vetor-21].pretendente == "vertical"
+                    if lista[pos_vetor].tipo == "elevador": lista[pos_vetor-21].pretendente = "vertical"
             if a != 6:
                 if lista[pos_vetor+21].vazio == True and lista[pos_vetor+21].pedra == False:
-                    if lista[pos_vetor].tipo == "elevador": lista[pos_vetor+21].pretendente == "vertical"
+                    if lista[pos_vetor].tipo == "elevador": lista[pos_vetor+21].pretendente = "vertical"
             if b != 0:
-                if lista[pos_vetor-1].vazio == True and lista[pos_vetor-1].pedra == False: lista[pos_vetor-1].pretendente == "total"
+                if lista[pos_vetor-1].vazio == True and lista[pos_vetor-1].pedra == False: lista[pos_vetor-1].pretendente = "total"
             if b != 20:
-                if lista[pos_vetor+1].vazio == True and lista[pos_vetor+1].pedra == False: lista[pos_vetor+1].pretendente == "total"
+                if lista[pos_vetor+1].vazio == True and lista[pos_vetor+1].pedra == False: lista[pos_vetor+1].pretendente = "total"
 
 
-def erguer(celula,tipo):
 
-    if tipo == "elevador":
-        celula.vazio = False
-        celula.pretendente = False
-        celula.tipo = "elevador"
-        celula.lvl = "0"
-        celula.situacao = "_1-1"
-        celula.consumo = 20
-        
+def erguer(lista, pos_vetor, jogo):
+
+    if jogo.construirtipo == "elevador":
+        lista[pos_vetor].vazio = False
+        lista[pos_vetor].pretendente = False
+        lista[pos_vetor].tipo = "elevador"
+        lista[pos_vetor].lvl = "0"
+        lista[pos_vetor].situacao = "_1-1"
+        lista[pos_vetor].consumo = 20
+        jogo.dinheiro -= 200
+
+    sucesso =  pygame.mixer.Sound(path.join('sons','obrafinalizada.wav'))
+    pygame.mixer.Sound.play(sucesso)
+
+
+
+
+
+def preparar_obra(jogo, lista):
+
+    voltar = pygame.image.load(path.join('sistema', 'voltar.png'))
+
+    jogo.modo = "construir"
+    while True:
+
+        animacao(jogo, lista, False)
+        jogo.janela.blit(voltar, (0,0))
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+
+                position = pos_x, pos_y = pygame.mouse.get_pos()
+                pos_vetor = achar_celula(position)
+
+                if pos_vetor == 0:
+                    jogo.modo = "espectador"
+                    return True
+
+                if lista[pos_vetor].pretendente == "vertical" or lista[pos_vetor].pretendente == "total":
+                    erguer(lista,pos_vetor,jogo)
+                    jogo.modo = "espectador"
+                    pretendencia(lista,pos_vetor,False)
+                    jogo.construirtipo = None
+                    return False
+
+        jogo.clock.tick(60)

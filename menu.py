@@ -1,4 +1,5 @@
 import pygame
+pygame.init()
 from os import path
 import sys
 import funcoes
@@ -19,7 +20,7 @@ class dados:
 
 
 
-def animacao():
+def cutscene():
     pass
 
 
@@ -29,7 +30,7 @@ def menu(jogo):
 
 
     #dados.zerar(self)
-    animacao()
+    cutscene()
 
     #opcoes: iniciar novo jogo, carregar jogo, manual, opcoes ou sair
     #se escolher iniciar jogo, pergunta posicao, nome do save e dificuldade
@@ -68,7 +69,9 @@ def sistema(jogo, lista):
             if event.type == pygame.MOUSEBUTTONUP:
                 position = pos_x, pos_y = pygame.mouse.get_pos()
                 if pos_x <= 51:
-                    if pos_y < 93: return
+                    if pos_y < 93: 
+                        jogo.modo = "espectador"        #garantir
+                        return
                     elif pos_y >= 93 and pos_y <= 372:
                         if pos_y >= 93 and pos_y < 186:
 
@@ -76,12 +79,12 @@ def sistema(jogo, lista):
                             
                             #jogo.modo = "construir"             #aqui vai pra funcao de escolher qual sala, e ai retorna total
                             #return
-                            voltou = selecionarsala(jogo,lista)
-                            if voltou == False: 
+                            voltou = selecionarsala(jogo,lista)#se voltar for falso, e pra sair. Verdade, e pra ficar
+                            if voltou == False:
                                 jogo.modo = "espectador"
                                 return
                             else:
-                                funcoes.animacao(jogo,lista)
+                                funcoes.animacao(jogo,lista,False)
                                 jogo.janela.blit(desfocar, (0,0))
                                 jogo.janela.blit(subsistemas, (0,0))
                                 pygame.display.flip()
@@ -96,11 +99,13 @@ def sistema(jogo, lista):
                 else: return
 
 
+        jogo.clock.tick(60)
+
 
 def selecionarsala(jogo,lista):
 
-    funcoes.animacao(jogo,lista)
-    jogo.modo = "construir"
+    funcoes.animacao(jogo,lista, False)
+    #jogo.modo = "construir"
 
 
     desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
@@ -119,9 +124,17 @@ def selecionarsala(jogo,lista):
                 pos_vetor = funcoes.achar_celula(position)
 
                 if pos_vetor == 0: 
-                    #jogo.modo = "espectador"
+                    #aqui e pra voltar pros subsistemas
                     return True
 
                 else:         #aqui acontece a selecao da sala
                     jogo.construirtipo = "elevador"
-                    return False
+                    voltou = funcoes.preparar_obra(jogo,lista)#se voltar for falso, e pra sair. Verdade, e pra ficar
+                    if voltou == False:
+                        return False
+                    else:
+                        funcoes.animacao(jogo,lista, False)
+                        jogo.janela.blit(desfocar, (0,0))
+                        jogo.janela.blit(voltar, (0,0))
+                        pygame.display.flip()
+        jogo.clock.tick(60)

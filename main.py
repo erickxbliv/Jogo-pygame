@@ -1,5 +1,8 @@
 import pygame
+from pygame import mixer
+
 pygame.init()
+mixer.init()
 import sys
 from os import path
 
@@ -16,7 +19,7 @@ class geral:
         self.carregar = None
         self.dados = None
         self.dinheiro = None
-        self.modo = None
+        self.modo = "espectador"
         self.clock = pygame.time.Clock()
 
         self.construirtipo = None
@@ -47,13 +50,11 @@ else: blueprint.carregar(celulas.lista,jogo)
 #sera se compensava eu ter os dados do jogo numa classe?
 #preto = 0, 0, 0
 horario = 1
-jogo.modo = "espectador"
 #modos: espectador - visualizar o bunker, construir - visualizar onde construir, espiar - assistir uma sala individualmente
 #clock tick
 
 while True:
 
-    
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
         if event.type == pygame.MOUSEBUTTONUP:
@@ -63,7 +64,6 @@ while True:
 
             if jogo.modo == "espectador":
 
-                
                 #print(pos_vetor)
                 if pos_vetor == 0:
                     menu.sistema(jogo,celulas.lista)
@@ -72,22 +72,5 @@ while True:
                     funcoes.minerar(jogo, celulas.lista[pos_vetor])
                     funcoes.pretendencia(celulas.lista,pos_vetor,True)
 
-
-
-            elif jogo.modo == "construir":       
-                
-
-                if pos_vetor == 0: menu.selecionarsala(jogo,celulas.lista)
-                   #so da pra construir clicando, mas as exibicoes nao podem esperar o clique
-                pos_vetor = funcoes.achar_celula(position)
-                if celulas.lista[pos_vetor].pretendente == "vertical" or celulas.lista[pos_vetor].pretendente == "total":
-                    funcoes.erguer(celulas.lista[pos_vetor],jogo.construirtipo)
-                    jogo.modo = "espectador"
-                    funcoes.pretendencia(celulas.lista,pos_vetor,False)
-                #talvez essa parte seria bom ser nada mais doq a hora que vc escolhe o lugar pra construir, so isso
-                #o resto acontece em outras funcoes
-                #funcoes.construir(jogo,celulas.lista)
-                
-
-    funcoes.animacao(jogo, celulas.lista)
+    funcoes.animacao(jogo, celulas.lista,True)
     jogo.clock.tick(60)
