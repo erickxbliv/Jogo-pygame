@@ -21,7 +21,13 @@ class geral:
 
         self.construirtipo = None
 
+        self.iconesistema = pygame.image.load(path.join('sistema', 'sistema.png'))
+        self.fundo = pygame.image.load(path.join('cenario', 'dia.png'))
+
     def menu(self):
+        pass
+
+    def ciclonoitedia(self):
         pass
 
 
@@ -33,8 +39,8 @@ if jogo.dados.carregar == False:
     blueprint.salvar(celulas.lista,jogo)
 else: blueprint.carregar(celulas.lista,jogo)
 
-iconesistema = pygame.image.load(path.join('sistema', 'sistema.png'))
-fundo = pygame.image.load(path.join('cenario', 'dia.png'))
+#iconesistema = pygame.image.load(path.join('sistema', 'sistema.png'))
+#fundo = pygame.image.load(path.join('cenario', 'dia.png'))
 #fundo_noite = pygame.image.load(path.join('cenario', 'noite.png'))
 #configuracoes = pygame.image.load("configuracoes.png")   #pode ficar "alocado" na celula 1 (0,0), e assim se sabe se foi aberta. 
 
@@ -48,13 +54,11 @@ jogo.modo = "espectador"
 while True:
 
     
-
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
         if event.type == pygame.MOUSEBUTTONUP:
+
             position = pos_x, pos_y = pygame.mouse.get_pos()
-            #se clicar numa sala, tem que abrir ela
             pos_vetor = funcoes.achar_celula(position)
 
             if jogo.modo == "espectador":
@@ -63,9 +67,8 @@ while True:
                 #print(pos_vetor)
                 if pos_vetor == 0:
                     menu.sistema(jogo,celulas.lista)
-                    
 
-                if celulas.lista[pos_vetor].pedra == True:
+                elif celulas.lista[pos_vetor].pedra == True:
                     funcoes.minerar(jogo, celulas.lista[pos_vetor])
                     funcoes.pretendencia(celulas.lista,pos_vetor,True)
 
@@ -74,7 +77,7 @@ while True:
             elif jogo.modo == "construir":       
                 
 
-                if pos_vetor == 0: menu.selecionarsala(jogo)
+                if pos_vetor == 0: menu.selecionarsala(jogo,celulas.lista)
                    #so da pra construir clicando, mas as exibicoes nao podem esperar o clique
                 pos_vetor = funcoes.achar_celula(position)
                 if celulas.lista[pos_vetor].pretendente == "vertical" or celulas.lista[pos_vetor].pretendente == "total":
@@ -86,23 +89,5 @@ while True:
                 #funcoes.construir(jogo,celulas.lista)
                 
 
-    """
-    jogo.janela.fill(preto)
-    jogo.janela.blit(fundo, (0,0))
-    jogo.janela.blit(iconesistema, (0,0))
-    if jogo.modo == "construir": funcoes.construiveis(jogo,celulas.lista)  #testando lugar
-
-    contagem = 0
-    while contagem < 147:
-        celulas.lista[contagem].imagem()    #sera se tem problema atualizar toda santa vez as imagens?
-        if celulas.lista[contagem].obj != None:
-            jogo.janela.blit(celulas.lista[contagem].obj,celulas.lista[contagem].coordenadas)
-
-        contagem += 1
-
-    pygame.display.flip()
-    """
-
-
-    funcoes.animacao(jogo, celulas.lista, fundo, iconesistema)
+    funcoes.animacao(jogo, celulas.lista)
     jogo.clock.tick(60)

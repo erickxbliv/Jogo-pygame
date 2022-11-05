@@ -55,24 +55,10 @@ def menu(jogo):
 
 def sistema(jogo, lista):
 
-    #licensa = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
-    #subsistemas = pygame.image.load(path.join('sistema', 'subsistemas.png'))
-    #jogo.janela.blit(licensa, (0,0))
-    #jogo.janela.blit(subsistemas, (0,0))
-    #pygame.display.flip()
-
-    #TESTANDOOOOOOOOOOO
-
-    testebosta = jogo.janela
-
-    licensa = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
+    desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
     subsistemas = pygame.image.load(path.join('sistema', 'subsistemas.png'))
-
-
-
-
-    testebosta.blit(licensa, (0,0))
-    testebosta.blit(subsistemas, (0,0))
+    jogo.janela.blit(desfocar, (0,0))
+    jogo.janela.blit(subsistemas, (0,0))
     pygame.display.flip()
 
     while True:
@@ -87,9 +73,18 @@ def sistema(jogo, lista):
                         if pos_y >= 93 and pos_y < 186:
 
 
-                            selecionarsala(jogo)
+                            
                             #jogo.modo = "construir"             #aqui vai pra funcao de escolher qual sala, e ai retorna total
-                            return
+                            #return
+                            voltou = selecionarsala(jogo,lista)
+                            if voltou == False: 
+                                jogo.modo = "espectador"
+                                return
+                            else:
+                                funcoes.animacao(jogo,lista)
+                                jogo.janela.blit(desfocar, (0,0))
+                                jogo.janela.blit(subsistemas, (0,0))
+                                pygame.display.flip()
 
 
                         if pos_y >= 186 and pos_y < 279:
@@ -102,16 +97,20 @@ def sistema(jogo, lista):
 
 
 
-def selecionarsala(jogo):
+def selecionarsala(jogo,lista):
 
-    licensa = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
-    jogo.janela.blit(licensa, (0,0))
+    funcoes.animacao(jogo,lista)
+    jogo.modo = "construir"
+
+
+    desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
+    voltar = pygame.image.load(path.join('sistema', 'voltar.png'))
+    jogo.janela.blit(desfocar, (0,0))
+    jogo.janela.blit(voltar, (0,0))
     pygame.display.flip()
 
-
-
     while True:
-        print('ei')
+        #print('ei')
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
             if event.type == pygame.MOUSEBUTTONUP:
@@ -119,6 +118,10 @@ def selecionarsala(jogo):
                 position = pos_x, pos_y = pygame.mouse.get_pos()
                 pos_vetor = funcoes.achar_celula(position)
 
-                jogo.construirtipo = "elevador"
-                jogo.modo = "construir"
-                return
+                if pos_vetor == 0: 
+                    #jogo.modo = "espectador"
+                    return True
+
+                else:         #aqui acontece a selecao da sala
+                    jogo.construirtipo = "elevador"
+                    return False
