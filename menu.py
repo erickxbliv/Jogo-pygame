@@ -128,13 +128,18 @@ def selecionarsala(jogo,lista):
                     return True
 
                 else:         #aqui acontece a selecao da sala
-                    jogo.construirtipo = "elevador"
-                    voltou = funcoes.preparar_obra(jogo,lista)#se voltar for falso, e pra sair. Verdade, e pra ficar
-                    if voltou == False:
-                        return False
+                    #aqui tambem acontece a probicao de construir caso dinheiro insuficiente
+                    if jogo.dinheiro < 200:
+                        #aq mostrar erro
+                        pass
                     else:
-                        funcoes.animacao(jogo,lista, False)
-                        jogo.janela.blit(desfocar, (0,0))
-                        jogo.janela.blit(voltar, (0,0))
-                        pygame.display.flip()
+                        jogo.construirtipo = "elevador"
+                        voltou = funcoes.preparar_obra(jogo,lista)#se voltar for falso, e pra sair. Verdade, e pra ficar
+                        if voltou == False:
+                            return False
+                        else:
+                            funcoes.animacao(jogo,lista, False)
+                            jogo.janela.blit(desfocar, (0,0))
+                            jogo.janela.blit(voltar, (0,0))
+                            pygame.display.flip()
         jogo.clock.tick(60)
