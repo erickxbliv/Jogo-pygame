@@ -10,7 +10,7 @@ class dados:
         #pagina1 = ["elevador","quarto","comida","agua"]
         #pagina2 = ["eletricidade","dinheiro","radio","treinamento"]
     
-        pagina1 = [0,0,0,0]
+        pagina1 = [100,0,0,0]
         pagina2 = [0,0,0,0]
         self.preco = [pagina1, pagina2]
         self.precoatual = None

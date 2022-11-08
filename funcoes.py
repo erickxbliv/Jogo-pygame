@@ -201,3 +201,11 @@ def catalogo(jogo, lista, desfocar, voltar, ant, prox,livrpaginatual, flipar):
     jogo.janela.blit(opcao4, (765,279))
 
     if flipar == True: pygame.display.flip()
+
+
+def texto(frase, cor, x, y):
+    font = pygame.font.Font(None,30)
+    display_surface = pygame.display.get_surface()
+    debug_surf = font.render(str(frase),True,cor)
+    debug_rect = debug_surf.get_rect(topleft = (x,y))
+    display_surface.blit(debug_surf,debug_rect)

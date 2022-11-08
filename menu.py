@@ -43,7 +43,7 @@ def menu(jogo):
     dificuldade = "facil"
     carregar = False
 
-    if dificuldade == "facil": jogo.dinheiro = 9999999     #quanto seria bom?
+    if dificuldade == "facil": jogo.dinheiro = 3000     #quanto seria bom?
     else: jogo.dinheiro = 2000
 
     jogo.dados = dados(dificuldade,carregar,posicao,nome)
@@ -124,7 +124,6 @@ def selecionarsala(jogo,lista):
     coord3 = [78,79,80,81,99,100,101,102]
 
     while True:
-        print("ola")
         if paginaatual == min:
             ant = "naopaginaanterior"
         else:
@@ -136,8 +135,23 @@ def selecionarsala(jogo,lista):
 
         funcoes.catalogo(jogo, lista, desfocar, voltar, ant, prox,livreto[paginaatual], False)
 
+        if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][0]: cor = "White"
+        else: cor = "Red"
+        funcoes.texto(str(jogo.sobresalas.preco[paginaatual][0]), cor,231,419)
+        if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][1]: cor = "White"
+        else: cor = "Red"
+        funcoes.texto(str(jogo.sobresalas.preco[paginaatual][1]), cor,433,419)
+        if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][2]: cor = "White"
+        else: cor = "Red"
+        funcoes.texto(str(jogo.sobresalas.preco[paginaatual][2]), cor,635,419)
+        if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][3]: cor = "White"
+        else: cor = "Red"
+        funcoes.texto(str(jogo.sobresalas.preco[paginaatual][3]), cor,837,419)
+
+
+
         #aqui acontece a impressao dos precos das salas, e necessario imprimir 4 precos, pra cada pagina
-        #por isso e necessario fazer a verificacao de cada preco, pra deixar em vermrlho
+        #por isso e necessario fazer a verificacao de cada preco, pra deixar em vermelho
         pygame.display.flip()
 
 
