@@ -11,6 +11,8 @@ import funcoes
 import menu
 import blueprint
 
+import testedados
+
 class geral:
     def __init__(self):
 
@@ -27,6 +29,8 @@ class geral:
         self.iconesistema = pygame.image.load(path.join('sistema', 'sistema.png'))
         self.fundo = pygame.image.load(path.join('cenario', 'dia.png'))
 
+        self.sobresalas = None
+
     def menu(self):
         pass
 
@@ -35,6 +39,7 @@ class geral:
 
 
 jogo = geral()
+jogo.sobresalas = testedados.dados()
 menu.menu(jogo)
 
 if jogo.dados.carregar == False:

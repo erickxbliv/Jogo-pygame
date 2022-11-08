@@ -127,6 +127,8 @@ def pretendencia(lista, pos_vetor, demolicao):
 
 def erguer(lista, pos_vetor, jogo):
 
+    #essa funcao tbm tem obrigacao de fundir salas
+
     if jogo.construirtipo == "elevador":
         lista[pos_vetor].vazio = False
         lista[pos_vetor].pretendente = False
@@ -134,7 +136,7 @@ def erguer(lista, pos_vetor, jogo):
         lista[pos_vetor].lvl = "0"
         lista[pos_vetor].situacao = "_1-1"
         lista[pos_vetor].consumo = 20
-        jogo.dinheiro -= 200
+        jogo.dinheiro -= jogo.sobresalas.precoatual
 
     sucesso =  pygame.mixer.Sound(path.join('sons','obrafinalizada.wav'))
     pygame.mixer.Sound.play(sucesso)
@@ -173,3 +175,29 @@ def preparar_obra(jogo, lista):
                     return False
 
         jogo.clock.tick(60)
+
+
+
+def catalogo(jogo, lista, desfocar, voltar, ant, prox,livrpaginatual, flipar):
+    
+    anterior = pygame.image.load(path.join('sistema', ant + '.png'))
+    proxima = pygame.image.load(path.join('sistema', prox + '.png'))
+
+    opcao1 = pygame.image.load(path.join('sistema', 'comprar' + livrpaginatual[0] + '.png'))
+    opcao2 = pygame.image.load(path.join('sistema', 'comprar' + livrpaginatual[1] + '.png'))
+    opcao3 = pygame.image.load(path.join('sistema', 'comprar' + livrpaginatual[2] + '.png'))
+    opcao4 = pygame.image.load(path.join('sistema', 'comprar' + livrpaginatual[3] + '.png'))
+    
+    animacao(jogo,lista, False)
+
+    jogo.janela.blit(desfocar, (0,0))
+    jogo.janela.blit(voltar, (0,0))
+    jogo.janela.blit(anterior, (51,279))
+    jogo.janela.blit(proxima, (969,279))
+
+    jogo.janela.blit(opcao1, (153,279))
+    jogo.janela.blit(opcao2, (357,279))
+    jogo.janela.blit(opcao3, (561,279))
+    jogo.janela.blit(opcao4, (765,279))
+
+    if flipar == True: pygame.display.flip()

@@ -43,7 +43,7 @@ def menu(jogo):
     dificuldade = "facil"
     carregar = False
 
-    if dificuldade == "facil": jogo.dinheiro = 2000     #quanto seria bom?
+    if dificuldade == "facil": jogo.dinheiro = 9999999     #quanto seria bom?
     else: jogo.dinheiro = 2000
 
     jogo.dados = dados(dificuldade,carregar,posicao,nome)
@@ -55,6 +55,8 @@ def menu(jogo):
 
 
 def sistema(jogo, lista):
+
+    jogo.sobresalas.precoatual = None #teste
 
     desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
     subsistemas = pygame.image.load(path.join('sistema', 'subsistemas.png'))
@@ -104,18 +106,42 @@ def sistema(jogo, lista):
 
 def selecionarsala(jogo,lista):
 
-    funcoes.animacao(jogo,lista, False)
     #jogo.modo = "construir"
-
 
     desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
     voltar = pygame.image.load(path.join('sistema', 'voltar.png'))
-    jogo.janela.blit(desfocar, (0,0))
-    jogo.janela.blit(voltar, (0,0))
-    pygame.display.flip()
+
+    pagina1 = ["elevador","quarto","comida","agua"]
+    pagina2 = ["eletricidade","dinheiro","radio","treinamento"]
+    livreto = [pagina1, pagina2]
+    paginaatual = 0
+    min = 0
+    max = 1
+
+    coord0 = [66,67,68,69,87,88,89,90]      #as celulas onde estao cada opcao
+    coord1 = [70,71,72,73,91,92,93,94]
+    coord2 = [74,75,76,77,95,96,97,98]
+    coord3 = [78,79,80,81,99,100,101,102]
 
     while True:
-        #print('ei')
+        print("ola")
+        if paginaatual == min:
+            ant = "naopaginaanterior"
+        else:
+            ant = "paginaanterior"
+        if paginaatual == max:
+            prox = "naopaginaproxima"
+        else:
+            prox = "paginaproxima"
+
+        funcoes.catalogo(jogo, lista, desfocar, voltar, ant, prox,livreto[paginaatual], False)
+
+        #aqui acontece a impressao dos precos das salas, e necessario imprimir 4 precos, pra cada pagina
+        #por isso e necessario fazer a verificacao de cada preco, pra deixar em vermrlho
+        pygame.display.flip()
+
+
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
             if event.type == pygame.MOUSEBUTTONUP:
@@ -127,19 +153,40 @@ def selecionarsala(jogo,lista):
                     #aqui e pra voltar pros subsistemas
                     return True
 
-                else:         #aqui acontece a selecao da sala
-                    #aqui tambem acontece a probicao de construir caso dinheiro insuficiente
-                    if jogo.dinheiro < 200:
-                        #aq mostrar erro
-                        pass
-                    else:
-                        jogo.construirtipo = "elevador"
-                        voltou = funcoes.preparar_obra(jogo,lista)#se voltar for falso, e pra sair. Verdade, e pra ficar
-                        if voltou == False:
-                            return False
-                        else:
-                            funcoes.animacao(jogo,lista, False)
-                            jogo.janela.blit(desfocar, (0,0))
-                            jogo.janela.blit(voltar, (0,0))
-                            pygame.display.flip()
+                elif pos_vetor == 64 or pos_vetor == 65 or pos_vetor == 85 or pos_vetor == 86:
+                    if paginaatual > min: paginaatual -= 1
+                elif pos_vetor == 82 or pos_vetor == 83 or pos_vetor == 103 or pos_vetor == 104:
+                    if paginaatual < max: paginaatual += 1
+
+                elif pos_vetor in coord0:
+                    if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][0]: 
+                        jogo.construirtipo = livreto[paginaatual][0]
+                        jogo.sobresalas.precoatual = jogo.sobresalas.preco[paginaatual][0]
+                    else: jogo.construirtipo = None
+
+                elif pos_vetor in coord1:
+                    if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][1]: 
+                        jogo.construirtipo = livreto[paginaatual][1]
+                        jogo.sobresalas.precoatual = jogo.sobresalas.preco[paginaatual][1]
+                    else: jogo.construirtipo = None
+
+                elif pos_vetor in coord2:
+                    if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][2]: 
+                        jogo.construirtipo = livreto[paginaatual][2]
+                        jogo.sobresalas.precoatual = jogo.sobresalas.preco[paginaatual][2]
+                    else: jogo.construirtipo = None
+
+                elif pos_vetor in coord3:
+                    if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][3]: 
+                        jogo.construirtipo = livreto[paginaatual][3]
+                        jogo.sobresalas.precoatual = jogo.sobresalas.preco[paginaatual][3]
+                    else: jogo.construirtipo = None
+                else: return True
+
+                if jogo.construirtipo != None:
+                    voltou = funcoes.preparar_obra(jogo,lista)#se voltar for falso, e pra sair. Verdade, e pra ficar
+                    if voltou == False:
+                        return False
+                    else: jogo.construirtipo = None
+
         jogo.clock.tick(60)
