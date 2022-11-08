@@ -9,6 +9,8 @@ import sys
 
 def animacao(jogo, lista, flipar):
 
+    jogo.sobresalas.testeduplas = []
+
     preto = 0, 0, 0
     jogo.janela.fill(preto)
     jogo.janela.blit(jogo.fundo, (0,0))
@@ -16,6 +18,8 @@ def animacao(jogo, lista, flipar):
 
     if jogo.modo == "construir":
         contorno1 = pygame.image.load(path.join('sistema', 'constrorno1.png'))
+        contorno2 = pygame.image.load(path.join('sistema', 'constrorno2.png'))
+        contorno3 = pygame.image.load(path.join('sistema', 'constrorno3.png'))
 
     contagem = 0
     while contagem < 147:
@@ -27,6 +31,32 @@ def animacao(jogo, lista, flipar):
             if jogo.construirtipo == "elevador":
                 if lista[contagem].pretendente == "total" or lista[contagem].pretendente == "vertical": 
                     jogo.janela.blit(contorno1,lista[contagem].coordenadas)
+            elif jogo.construirtipo == "treinamento":
+                b = (contagem) % 21
+
+                if lista[contagem].pretendente == "total":
+                    ctg = contagem
+                    if lista[ctg-1].vazio and not lista[ctg-1].pedra and lista[ctg-2].vazio and not lista[ctg-2].pedra and b > 1:
+                        jogo.janela.blit(contorno3,lista[contagem-2].coordenadas)
+
+                    elif lista[ctg+1].vazio and not lista[ctg+1].pedra and lista[ctg+2].vazio and not lista[ctg+2].pedra and b < 19:
+                        jogo.janela.blit(contorno3,lista[contagem].coordenadas)
+
+
+            else:
+                b = (contagem) % 21
+                if lista[contagem].pretendente == "total":
+                    if lista[contagem-1].vazio and not lista[contagem-1].pedra and b != 0:
+                        jogo.janela.blit(contorno2,lista[contagem-1].coordenadas)
+
+                        jogo.sobresalas.testduplas.append(ctg)      #TESTEEEEEEEEE
+                        jogo.sobresalas.testduplas.append(ctg-1)
+
+                    elif lista[contagem+1].vazio and not lista[contagem+1].pedra and b != 20:
+                        jogo.janela.blit(contorno2,lista[contagem].coordenadas)
+
+                        jogo.sobresalas.testduplas.append(ctg)      #TESTEEEEEEEEE
+                        jogo.sobresalas.testduplas.append(ctg+1)
 
         contagem += 1
 
@@ -125,7 +155,7 @@ def pretendencia(lista, pos_vetor, demolicao):
 
 
 
-def erguer(lista, pos_vetor, jogo):
+def erguer(lista, pos_vetor, jogo, direcao):
 
     #essa funcao tbm tem obrigacao de fundir salas
 
@@ -136,7 +166,36 @@ def erguer(lista, pos_vetor, jogo):
         lista[pos_vetor].lvl = "0"
         lista[pos_vetor].situacao = "_1-1"
         lista[pos_vetor].consumo = 20
-        jogo.dinheiro -= jogo.sobresalas.precoatual
+        jogo.dinheiro -= jogo.sobresalas.preco[0][0]
+        jogo.sobresalas.aumentar_qtd(0)
+
+    elif jogo.construirtipo == "quarto":
+        if direcao == "esquerda":
+            dupla = pos_vetor - 1
+            sitPV = "_2-2"
+            sitD = "_1-2"
+        else: 
+            dupla = pos_vetor + 1
+            sitPV = "_1-2"
+            sitD = "_2-2"
+
+        lista[pos_vetor].vazio = False
+        lista[pos_vetor].pretendente = False
+        lista[pos_vetor].tipo = "quarto"
+        lista[pos_vetor].lvl = "1"
+        lista[pos_vetor].situacao = sitPV
+        lista[pos_vetor].consumo = jogo.sobresalas.cnsm_EQCAEDRT[1]
+        jogo.dinheiro -= jogo.sobresalas.preco[0][1]
+        jogo.sobresalas.aumentar_qtd(1)
+
+        lista[dupla].vazio = False          #nao da pra fazer duas atribuicoes ao mesmo tempo nao?
+        lista[dupla].pretendente = False
+        lista[dupla].tipo = "quarto"
+        lista[dupla].lvl = "1"
+        lista[dupla].situacao = sitD
+        lista[dupla].consumo = jogo.sobresalas.cnsm_EQCAEDRT[1]
+        jogo.dinheiro -= jogo.sobresalas.preco[0][1]
+        jogo.sobresalas.aumentar_qtd(1)
 
     sucesso =  pygame.mixer.Sound(path.join('sons','obrafinalizada.wav'))
     pygame.mixer.Sound.play(sucesso)
@@ -173,6 +232,21 @@ def preparar_obra(jogo, lista):
                     pretendencia(lista,pos_vetor,False)
                     jogo.construirtipo = None
                     return False
+
+                elif pos_vetor in jogo.sobresalas.testeduplas:      #TESTEEEEE
+                    #no caso como seria o convencional: a mesma testagem q ocorre na animacao, se numa margem, se ao lado disponivel
+                    #ai apenas guardaria qual direcao q esta, e ao olhar a direcao contraria, ja avisaria se havera fusao
+                    #porque nesse modo nos ainda podemos clicar em uma celula que nao e pretendente... como eu faco?
+                    #no caso, ate pra pretendencia, e necessario mandar o id de uma extremidade, nunca da clicada
+
+                    #apaga aquilo q fez na animacao e n precisa isso de testeduplas
+                    #apenas colocar a funcao acima dentro de um if pro elevador, pq as outras salas pode clicar fora da prtd
+                    #ai verificar se onde foi clicado, tem como dupla uma pretendente total
+                    #ou se clicar numa pretendente, verificar se tem uma dupla vazia (importante essas 2 coisas)
+                    #enviar a coordenada da pretendente pra erguer e a direcao da dupla, e se vai fundir
+                    #enviar pra funcao pretendente a coordenada da celula nao pretendente... sera se da certo
+                    pass
+
 
         jogo.clock.tick(60)
 

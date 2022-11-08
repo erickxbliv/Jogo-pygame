@@ -56,8 +56,6 @@ def menu(jogo):
 
 def sistema(jogo, lista):
 
-    jogo.sobresalas.precoatual = None #teste
-
     desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
     subsistemas = pygame.image.load(path.join('sistema', 'subsistemas.png'))
     jogo.janela.blit(desfocar, (0,0))
@@ -148,10 +146,6 @@ def selecionarsala(jogo,lista):
         else: cor = "Red"
         funcoes.texto(str(jogo.sobresalas.preco[paginaatual][3]), cor,837,419)
 
-
-
-        #aqui acontece a impressao dos precos das salas, e necessario imprimir 4 precos, pra cada pagina
-        #por isso e necessario fazer a verificacao de cada preco, pra deixar em vermelho
         pygame.display.flip()
 
 
@@ -198,7 +192,7 @@ def selecionarsala(jogo,lista):
                 else: return True
 
                 if jogo.construirtipo != None:
-                    voltou = funcoes.preparar_obra(jogo,lista)#se voltar for falso, e pra sair. Verdade, e pra ficar
+                    voltou = funcoes.preparar_obra(jogo,lista) #se voltar for falso, e pra sair. Verdade, e pra ficar
                     if voltou == False:
                         return False
                     else: jogo.construirtipo = None

@@ -36,6 +36,7 @@ class geral:
 
     def ciclonoitedia(self):
         pass
+    #dar um pouco de dinheiro pra pessoa pelo menos sobreviver
 
 
 jogo = geral()
