@@ -9,7 +9,7 @@ import sys
 
 def animacao(jogo, lista, flipar):
 
-    jogo.sobresalas.testeduplas = []
+    #jogo.sobresalas.testeduplas = []
 
     preto = 0, 0, 0
     jogo.janela.fill(preto)
@@ -49,21 +49,21 @@ def animacao(jogo, lista, flipar):
                     if lista[contagem-1].vazio and not lista[contagem-1].pedra and b != 0:
                         jogo.janela.blit(contorno2,lista[contagem-1].coordenadas)
 
-                        jogo.sobresalas.testduplas.append(ctg)      #TESTEEEEEEEEE
-                        jogo.sobresalas.testduplas.append(ctg-1)
+                        #jogo.sobresalas.testduplas.append(ctg)      #TESTEEEEEEEEE
+                        #jogo.sobresalas.testduplas.append(ctg-1)
 
                     elif lista[contagem+1].vazio and not lista[contagem+1].pedra and b != 20:
                         jogo.janela.blit(contorno2,lista[contagem].coordenadas)
 
-                        jogo.sobresalas.testduplas.append(ctg)      #TESTEEEEEEEEE
-                        jogo.sobresalas.testduplas.append(ctg+1)
+                        #jogo.sobresalas.testduplas.append(ctg)      #TESTEEEEEEEEE
+                        #jogo.sobresalas.testduplas.append(ctg+1)
 
         contagem += 1
 
     if flipar == True: pygame.display.flip()
 
 
-def minerar(jogo, celula):        #n seria bom mandar so o objeto?
+def minerar(jogo, celula):
 
     confirmacao = pygame.image.load(path.join('sistema', 'removerpedra.png'))
     contorno = pygame.image.load(path.join('sistema', 'contorno1.png'))
@@ -136,7 +136,7 @@ def pretendencia(lista, pos_vetor, demolicao):
             if lista[pos_vetor+1].vazio == False: lista[pos_vetor].pretendente = "total"
     
 
-    else:
+    else:                                       #era bom q aqui tambem removesse, qnd destroi uma sala
         #print("plim")
         if lista[pos_vetor].vazio == False:
             a = ((pos_vetor) // 21) #representa o i na matriz
@@ -155,7 +155,7 @@ def pretendencia(lista, pos_vetor, demolicao):
 
 
 
-def erguer(lista, pos_vetor, jogo, direcao):
+def erguer(lista, pos_vetor, jogo):
 
     #essa funcao tbm tem obrigacao de fundir salas
 
@@ -169,6 +169,29 @@ def erguer(lista, pos_vetor, jogo, direcao):
         jogo.dinheiro -= jogo.sobresalas.preco[0][0]
         jogo.sobresalas.aumentar_qtd(0)
 
+    elif jogo.construirtipo == "quarto":
+
+        lista[pos_vetor].vazio = False
+        lista[pos_vetor].pretendente = False
+        lista[pos_vetor].tipo = "quarto"
+        lista[pos_vetor].lvl = "1"
+        lista[pos_vetor].situacao = "_1-2"
+        lista[pos_vetor].consumo = jogo.sobresalas.cnsm_EQCAEDRT[1]
+        jogo.dinheiro -= jogo.sobresalas.preco[0][1]
+        jogo.sobresalas.aumentar_qtd(1)
+
+        lista[pos_vetor+1].vazio = False
+        lista[pos_vetor+1].pretendente = False
+        lista[pos_vetor+1].tipo = "quarto"
+        lista[pos_vetor+1].lvl = "1"
+        lista[pos_vetor+1].situacao = "_2-2"
+        lista[pos_vetor+1].consumo = jogo.sobresalas.cnsm_EQCAEDRT[1]
+        jogo.sobresalas.aumentar_qtd(1)
+
+
+
+
+    """
     elif jogo.construirtipo == "quarto":
         if direcao == "esquerda":
             dupla = pos_vetor - 1
@@ -196,6 +219,7 @@ def erguer(lista, pos_vetor, jogo, direcao):
         lista[dupla].consumo = jogo.sobresalas.cnsm_EQCAEDRT[1]
         jogo.dinheiro -= jogo.sobresalas.preco[0][1]
         jogo.sobresalas.aumentar_qtd(1)
+    """
 
     sucesso =  pygame.mixer.Sound(path.join('sons','obrafinalizada.wav'))
     pygame.mixer.Sound.play(sucesso)
@@ -226,14 +250,89 @@ def preparar_obra(jogo, lista):
                     jogo.modo = "espectador"
                     return True
 
-                if lista[pos_vetor].pretendente == "vertical" or lista[pos_vetor].pretendente == "total":
-                    erguer(lista,pos_vetor,jogo)
-                    jogo.modo = "espectador"
-                    pretendencia(lista,pos_vetor,False)
-                    jogo.construirtipo = None
-                    return False
+                if jogo.construirtipo == "elevador":
+                    if lista[pos_vetor].pretendente == "vertical" or lista[pos_vetor].pretendente == "total":
+                        erguer(lista,pos_vetor,jogo)
+                        jogo.modo = "espectador"
+                        pretendencia(lista,pos_vetor,False)
+                        jogo.construirtipo = None
+                        return False
 
-                elif pos_vetor in jogo.sobresalas.testeduplas:      #TESTEEEEE
+                    else: print("ai pode nao")
+
+
+
+
+                elif jogo.construirtipo == "treinamento": pass
+
+
+
+
+                else:
+                    b = (pos_vetor) % 21
+                    l = lista
+                    p = pos_vetor
+                    t = "total"
+                    executar = True
+
+                    if l[p].pretendente == t and b == 0 and not l[p+1].vazio:
+                        executar = False
+                    elif l[p].pretendente == t and b == 20 and not l[p-1].vazio:
+                        executar = False
+                    elif l[p].pretendente == t and b > 0 and b < 18 and not l[p-1].vazio and l[p+1].pretendente == t and not l[p+2].vazio:
+                        pass    #uma construcao entre 2 salas, uma intersseccao
+                    elif l[p].pretendente == t and b > 1 and b < 19 and not l[p+1].vazio and l[p-1].pretendente == t and not l[p-2].vazio:
+                        pos_vetor = p - 1
+                    
+
+                    elif l[p].pretendente == t and b > 0 and b < 20:        #aq quando vc clica numa pretendente, 2 casos
+                        if l[p-1].pretendente != t and not l[p-1].pedra and not l[p+1].vazio:
+                            pos_vetor = p - 1
+                        elif l[p+1].pretendente != t and not l[p+1].pedra and not l[p-1].vazio:
+                            pass
+
+                    elif l[p].pretendente != t and not l[p].pedra:
+                        if l[p-1].pretendente == t and not l[p-2].vazio and b > 1:
+                            pos_vetor = p - 1
+                        elif l[p+1].pretendente == t and not l[p+2].vazio and b < 19:
+                            pass
+                    else: 
+                        print("celula vazia, amigo")
+                        executar = False
+                    
+
+
+                    if executar:
+                        erguer(lista,pos_vetor,jogo)
+                        jogo.modo = "espectador"
+                        pretendencia(lista,pos_vetor,False)
+                        jogo.construirtipo = None
+                        return False
+
+
+
+
+
+                    #if lista[pos_vetor].pretendente == "total" and b != 0 and b != 20 and not lista[pos_vetor+1].vazio:
+                        #if not lista[pos_vetor-1].pedra and lista[pos_vetor-1].vazio:
+
+                        
+                    #elif lista[pos_vetor].pretendente == "total" and b != 0:
+                        #if not lista[pos_vetor+1].pedra and lista[pos_vetor+1].vazio and not lista[pos_vetor-1].vazio:
+
+
+                    
+
+                    #if lista[pos_vetor].pretendente == "total": pass
+                    #elif lista[pos_vetor-1].pretendente == "total" and b != -1: pass
+                    #elif lista[pos_vetor+1].pretendente == "total": pass
+                    #else: pass #aq n deve acontecer nada
+
+
+
+
+
+                #elif pos_vetor in jogo.sobresalas.testeduplas:      #TESTEEEEE
                     #no caso como seria o convencional: a mesma testagem q ocorre na animacao, se numa margem, se ao lado disponivel
                     #ai apenas guardaria qual direcao q esta, e ao olhar a direcao contraria, ja avisaria se havera fusao
                     #porque nesse modo nos ainda podemos clicar em uma celula que nao e pretendente... como eu faco?
