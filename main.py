@@ -70,6 +70,8 @@ while True:
 
             if jogo.modo == "espectador":
 
+                print("###################\n",vars(celulas.lista[pos_vetor]),"\n----------------------")   #teste
+
                 #print(pos_vetor)
                 if pos_vetor == 0:
                     menu.sistema(jogo,celulas.lista)
