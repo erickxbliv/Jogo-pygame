@@ -13,13 +13,14 @@ def animacao(jogo, lista, flipar):
 
     preto = 0, 0, 0
     jogo.janela.fill(preto)
+    jogo.janela.blit(jogo.fuso,(0,0))
     jogo.janela.blit(jogo.fundo, (0,0))
     jogo.janela.blit(jogo.iconesistema, (0,0))
 
     if jogo.modo == "construir":
         contorno1 = pygame.image.load(path.join('sistema', 'constrorno1.png'))
         contorno2 = pygame.image.load(path.join('sistema', 'constrorno2.png'))
-        contorno3 = pygame.image.load(path.join('sistema', 'constrorno3.png'))
+        #contorno3 = pygame.image.load(path.join('sistema', 'constrorno3.png'))
 
     contagem = 0
     while contagem < 147:
@@ -63,9 +64,12 @@ def animacao(jogo, lista, flipar):
                         #jogo.sobresalas.testduplas.append(ctg+1)
 
         contagem += 1
-
+    hud(jogo)
     if flipar == True: pygame.display.flip()
 
+
+def hud(jogo):
+    pass
 
 def minerar(jogo, celula):
 

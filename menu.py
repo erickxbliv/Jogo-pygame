@@ -43,8 +43,12 @@ def menu(jogo):
     dificuldade = "facil"
     carregar = False
 
-    if dificuldade == "facil": jogo.dinheiro = 5000     #quanto seria bom?
-    else: jogo.dinheiro = 2500
+    if dificuldade == "facil": 
+        jogo.dinheiro = 5000     #quanto seria bom?
+        jogo.sobresalas.lucrodia = 20
+    else: 
+        jogo.dinheiro = 2500
+        jogo.sobresalas.lucrodia = 10
 
     jogo.dados = dados(dificuldade,carregar,posicao,nome)
     
@@ -110,7 +114,7 @@ def selecionarsala(jogo,lista):
     voltar = pygame.image.load(path.join('sistema', 'voltar.png'))
 
     pagina1 = ["elevador","quarto","cozinha","tratamento"]
-    pagina2 = ["gerador","renda","radio","treinamento"]
+    pagina2 = ["gerador","renda","laboratorio","treinamento"]
     livreto = [pagina1, pagina2]
     paginaatual = 0
     min = 0

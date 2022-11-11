@@ -9,13 +9,15 @@ class dados:
         #preco
         self.cnsm_EQCAEDRT = [0,0,0,0,0,0,0,0]
         #pagina1 = ["elevador","quarto","cozinha","tratamento"]
-        #pagina2 = ["gerador","renda","radio","treinamento"]
+        #pagina2 = ["gerador","renda","laboratorio","treinamento"]      #cancelei radio
     
         self.pagina0 = [100//4,80//4,200//4,200//4]
         self.pagina1 = [200//4,100//4,300//4,500//4]
 
         self.preco = [[100,80,200,200],[200,100,300,500]]
         self.precoatual = None
+
+        self.lucrodia = None
 
 
         #self.testeduplas = []

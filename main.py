@@ -12,30 +12,36 @@ import menu
 import blueprint
 
 import testedados
+import dwellers
 
 class geral:
     def __init__(self):
 
-        self.janela = pygame.display.set_mode((1071,651))
+        self.janela = pygame.display.set_mode((1071,701))
+        self.clock = pygame.time.Clock()
+        self.iconesistema = pygame.image.load(path.join('sistema', 'sistema.png'))
+        self.fundo = pygame.image.load(path.join('cenario', 'fundo.png'))
+        self.fuso = pygame.image.load(path.join('fundo', '12horas.png'))
+
         self.dificuldade = None
         self.carregar = None
         self.dados = None
-        self.dinheiro = None
         self.modo = "espectador"
-        self.clock = pygame.time.Clock()
-
+        
         self.construirtipo = None
-
-        self.iconesistema = pygame.image.load(path.join('sistema', 'sistema.png'))
-        self.fundo = pygame.image.load(path.join('cenario', 'dia.png'))
-
         self.sobresalas = None
+
+        self.dinheiro = None
+        self.energia = None
+        self.comida = None
+        self.agua = None
 
     def menu(self):
         pass
 
-    def ciclonoitedia(self):
-        pass
+    def ciclonoitedia(self, x):
+        #fdeeb1
+        self.fuso = pygame.image.load(path.join('fundo', str(x) + 'horas.png'))
     #dar um pouco de dinheiro pra pessoa pelo menos sobreviver
 
 
@@ -56,6 +62,7 @@ else: blueprint.carregar(celulas.lista,jogo)
 #sera se compensava eu ter os dados do jogo numa classe?
 #preto = 0, 0, 0
 horario = 1
+x = 12.0
 #modos: espectador - visualizar o bunker, construir - visualizar onde construir, espiar - assistir uma sala individualmente
 #clock tick
 
@@ -70,7 +77,7 @@ while True:
 
             if jogo.modo == "espectador":
 
-                print("###################\n",vars(celulas.lista[pos_vetor]),"\n----------------------")   #teste
+                #print("###################\n",vars(celulas.lista[pos_vetor]),"\n----------------------")   #teste
 
                 #print(pos_vetor)
                 if pos_vetor == 0:
@@ -81,4 +88,10 @@ while True:
                     funcoes.pretendencia(celulas.lista,pos_vetor,True)
 
     funcoes.animacao(jogo, celulas.lista,True)
+
+    jogo.ciclonoitedia(int(x))
+    x += 0.01
+    if x > 24.0:    #24 = max de imagens
+        x = 1.0
+        jogo.dinheiro += jogo.sobresalas.lucrodia
     jogo.clock.tick(60)
