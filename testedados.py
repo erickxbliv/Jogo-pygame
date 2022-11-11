@@ -8,8 +8,8 @@ class dados:
         #salas com nivel maior nao podem aumentar a quantidade se nao o preco pra construir novas se elevaria demais
         #preco
         self.cnsm_EQCAEDRT = [0,0,0,0,0,0,0,0]
-        #pagina1 = ["elevador","quarto","comida","agua"]
-        #pagina2 = ["eletricidade","dinheiro","radio","treinamento"]
+        #pagina1 = ["elevador","quarto","cozinha","tratamento"]
+        #pagina2 = ["gerador","renda","radio","treinamento"]
     
         self.pagina0 = [100//4,80//4,200//4,200//4]
         self.pagina1 = [200//4,100//4,300//4,500//4]

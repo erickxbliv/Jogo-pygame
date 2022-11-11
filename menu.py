@@ -109,8 +109,8 @@ def selecionarsala(jogo,lista):
     desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
     voltar = pygame.image.load(path.join('sistema', 'voltar.png'))
 
-    pagina1 = ["elevador","quarto","comida","agua"]
-    pagina2 = ["eletricidade","dinheiro","radio","treinamento"]
+    pagina1 = ["elevador","quarto","cozinha","tratamento"]
+    pagina2 = ["gerador","renda","radio","treinamento"]
     livreto = [pagina1, pagina2]
     paginaatual = 0
     min = 0

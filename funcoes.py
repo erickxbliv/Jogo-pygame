@@ -163,81 +163,60 @@ def erguer(lista, pos_vetor, jogo, fundir):
 
     #essa funcao tbm tem obrigacao de fundir salas
 
+    lista[pos_vetor].vazio = False
+    lista[pos_vetor].pretendente = False
+    lista[pos_vetor].tipo = jogo.construirtipo
+
     if jogo.construirtipo == "elevador":
-        lista[pos_vetor].vazio = False
-        lista[pos_vetor].pretendente = False
-        lista[pos_vetor].tipo = "elevador"
+        
         lista[pos_vetor].lvl = "0"
         lista[pos_vetor].situacao = "_1-1"
         lista[pos_vetor].consumo = jogo.sobresalas.cnsm_EQCAEDRT[0]
         jogo.dinheiro -= jogo.sobresalas.preco[0][0]
         jogo.sobresalas.aumentar_qtd(0)
 
-    elif jogo.construirtipo == "quarto":
+    else:
 
-        lista[pos_vetor].vazio = False
-        lista[pos_vetor].pretendente = False
-        lista[pos_vetor].tipo = "quarto"
         lista[pos_vetor].lvl = "1"
         lista[pos_vetor].situacao = "_1-2"
-        lista[pos_vetor].consumo = jogo.sobresalas.cnsm_EQCAEDRT[1]
-        jogo.dinheiro -= jogo.sobresalas.preco[0][1]
-        jogo.sobresalas.aumentar_qtd(1)
 
         lista[pos_vetor+1].vazio = False
         lista[pos_vetor+1].pretendente = False
-        lista[pos_vetor+1].tipo = "quarto"
+        lista[pos_vetor+1].tipo = jogo.construirtipo
         lista[pos_vetor+1].lvl = "1"
         lista[pos_vetor+1].situacao = "_2-2"
-        lista[pos_vetor+1].consumo = jogo.sobresalas.cnsm_EQCAEDRT[1]
-        jogo.sobresalas.aumentar_qtd(1)
 
-    if fundir == "esquerda":
-        if lista[pos_vetor-2].situacao[3] == "4":
-            lista[pos_vetor-4].situacao = "_1-6"            
-            lista[pos_vetor-3].situacao = "_2-6"
-            lista[pos_vetor-2].situacao = "_3-6"            
-            lista[pos_vetor-1].situacao = "_4-6"
-            lista[pos_vetor].situacao = "_5-6"
-            lista[pos_vetor+1].situacao = "_6-6"
-        else:
-            lista[pos_vetor-2].situacao = "_1-4"            
-            lista[pos_vetor-1].situacao = "_2-4"
-            lista[pos_vetor].situacao = "_3-4"
-            lista[pos_vetor+1].situacao = "_4-4"
-    elif fundir == "direita":
-        if lista[pos_vetor+2].situacao[3] == "4":
-            lista[pos_vetor].situacao = "_1-6"
-            lista[pos_vetor+1].situacao = "_2-6"
-            lista[pos_vetor+2].situacao = "_3-6"
-            lista[pos_vetor+3].situacao = "_4-6"
-            lista[pos_vetor+4].situacao = "_5-6"
-            lista[pos_vetor+5].situacao = "_6-6"
-        else:
-            lista[pos_vetor].situacao = "_1-4"
-            lista[pos_vetor+1].situacao = "_2-4"
-            lista[pos_vetor+2].situacao = "_3-4"
-            lista[pos_vetor+3].situacao = "_4-4"
-    elif fundir == "esquerda e direita":
-        lista[pos_vetor-2].situacao = "_1-6"
-        lista[pos_vetor-1].situacao = "_2-6"
-        lista[pos_vetor].situacao = "_3-6"
-        lista[pos_vetor+1].situacao = "_4-6"
-        lista[pos_vetor+2].situacao = "_5-6"
-        lista[pos_vetor+3].situacao = "_6-6"
-    
-    if fundir != None:
-        lista[pos_vetor-4].obj = None            
-        lista[pos_vetor-3].obj = None
-        lista[pos_vetor-2].obj = None
-        lista[pos_vetor-1].obj = None
-        lista[pos_vetor].obj = None
-        lista[pos_vetor+1].obj = None
-        lista[pos_vetor+2].obj = None
-        lista[pos_vetor+3].obj = None
-        lista[pos_vetor+4].obj = None
-        lista[pos_vetor+5].obj = None
+        x = None
+        if jogo.construirtipo == "quarto":
+            jogo.dinheiro -= jogo.sobresalas.preco[0][1]
+            x = 1
+        elif jogo.construirtipo == "cozinha":
+            jogo.dinheiro -= jogo.sobresalas.preco[0][2]
+            x = 2
+        elif jogo.construirtipo == "tratamento":
+            jogo.dinheiro -= jogo.sobresalas.preco[0][3]
+            x = 3
+        elif jogo.construirtipo == "gerador":
+            jogo.dinheiro -= jogo.sobresalas.preco[1][0]
+            x = 4
+        elif jogo.construirtipo == "renda":
+            jogo.dinheiro -= jogo.sobresalas.preco[1][1]
+            x = 5
+        elif jogo.construirtipo == "radio":
+            jogo.dinheiro -= jogo.sobresalas.preco[1][2]
+            x = 6
+        elif jogo.construirtipo == "treinamento":
+            jogo.dinheiro -= jogo.sobresalas.preco[1][3]
+            x = 7
+   
+        lista[pos_vetor].consumo = jogo.sobresalas.cnsm_EQCAEDRT[x]
+        jogo.sobresalas.aumentar_qtd(x)
+        lista[pos_vetor+1].consumo = jogo.sobresalas.cnsm_EQCAEDRT[x]
+        jogo.sobresalas.aumentar_qtd(x)
 
+
+
+    if fundir != None: fusao(jogo,lista,pos_vetor,fundir)
 
     sucesso =  pygame.mixer.Sound(path.join('sons','obrafinalizada.wav'))
     pygame.mixer.Sound.play(sucesso)
@@ -277,15 +256,6 @@ def preparar_obra(jogo, lista):
                         return False
 
                     else: print("ai pode nao")
-
-
-
-
-                #elif jogo.construirtipo == "treinamento": pass
-
-
-
-
                 else:
                     b = (pos_vetor) % 21
                     l = lista
@@ -296,67 +266,48 @@ def preparar_obra(jogo, lista):
 
                     if l[p].pretendente == t and b == 0 and not l[p+1].vazio:
                         executar = False        #caso onde tem 1 celula sozinha na margem esquerda sendo amassada
-                        print("AAAAAAAA")
                     elif l[p].pretendente == t and b == 20 and not l[p-1].vazio:
                         executar = False        #caso onde tem 1 celula sozinha na margem direita sendo amassada
-                        print("BBBBBBB")
-                        
                     elif l[p].pretendente == t and b > 0 and b < 18 and not l[p-1].vazio and l[p+1].pretendente == t and not l[p+2].vazio:
-                        pass    #uma construcao entre 2 salas, uma intersseccao, onde a clicada tem uma esquerda ocupada
+                        #uma construcao entre 2 salas, uma intersseccao, onde a clicada tem uma esquerda ocupada
                         if jogo.construirtipo == l[p-1].tipo and 1 == int(l[p-1].lvl): 
                             if int(l[p-1].situacao[3]) < 6: fundir = "esquerda"
                         if jogo.construirtipo == l[p+2].tipo and 1 == int(l[p+2].lvl):
                             if int(l[p-1].situacao[3]) <= 2 and int(l[p+2].situacao[3]) <= 2: 
                                 if fundir == "esquerda": fundir = "esquerda e direita"
                                 else: fundir == "direita"
-                        print("CCCCCCCC")
                     elif l[p].pretendente == t and b > 1 and b < 19 and not l[p+1].vazio and l[p-1].pretendente == t and not l[p-2].vazio:
                                 #aq pode ter erro, ctrlv. Melhor ficar assim, ai a celula q vc clica pode alterar a preferencia
-                        #print("TESTE :", jogo.construirtipo, " = ", l[p+1].tipo, " e ", l[p+1].lvl, " = 1")
-                        #print("TESTE :", jogo.construirtipo, " = ", l[p-2].tipo, " e ", l[p-2].lvl, " = 1")        
                         if jogo.construirtipo == l[p+1].tipo and 1 == int(l[p+1].lvl):     
-                            
                             if int(l[p-2].situacao[3]) < 6: fundir = "direita"
-                            
                         if jogo.construirtipo == l[p-2].tipo and 1 == int(l[p-2].lvl):
-                            
                             if int(l[p+1].situacao[3]) <= 2 and int(l[p-2].situacao[3]) <= 2: 
                                 if fundir == "direita": fundir = "esquerda e direita"
                                 else: fundir == "esquerda"
-
                         pos_vetor = p - 1  #uma construcao entre 2 salas, uma intersseccao, onde a clicada tem uma direita ocupada
-                        print("DDDDDDDD")
                     elif l[p].pretendente == t and b > 0 and b < 20:        #aq quando vc clica numa pretendente, 2 casos
-                        print("EEEFFF")
                         if l[p-1].pretendente != t and not l[p-1].pedra and not l[p+1].vazio:
                             if jogo.construirtipo == l[p+1].tipo and 1 == int(l[p+1].lvl):
                                 if int(l[p+1].situacao[3]) < 6: fundir = "direita"
                             pos_vetor = p - 1           #vc clicou na celula que tem uma ocupada a direita
-                            print("EEEEEEEE")
                         elif l[p+1].pretendente != t and not l[p+1].pedra and not l[p-1].vazio:
-                            pass            #vc clicou na celula que tem uma ocupada a esquerda
+                            #vc clicou na celula que tem uma ocupada a esquerda
                             if jogo.construirtipo == l[p-1].tipo and 1 == int(l[p-1].lvl):
                                 if int(l[p-1].situacao[3]) < 6: fundir = "esquerda"
-                            print("FFFFFFFFFF")
                         else: executar = False
                     #a ordem das 2 condicoes a seguir representa oq vai ser escolhido no caso de um diagrama de venn
                     elif l[p].pretendente != t and not l[p].pedra:          #quando vc clica numa nao pretendente de salas normais
-                        print("GGGHHH")
                         if l[p-1].pretendente == t and not l[p-2].vazio and b > 1:
                             if jogo.construirtipo == l[p-2].tipo and 1 == int(l[p-2].lvl):
                                 if int(l[p-2].situacao[3]) < 6: fundir = "esquerda"
                             pos_vetor = p - 1           #se a esquerda dela tem uma sala pretendente, porque a esquerda dela e ocupado
-                            print("GGGGGGG")
                         elif l[p+1].pretendente == t and not l[p+2].vazio and b < 19:
                             if jogo.construirtipo == l[p+2].tipo and 1 == int(l[p+2].lvl):
                                 if int(l[p+2].situacao[3]) < 6: fundir = "direita"
-                            pass                        #se a direita dela tem uma pretendente porque sua direita esta ocupada
-                            print("HHHHHHHH")
+                            #se a direita dela tem uma pretendente porque sua direita esta ocupada
                         else: executar = False
                     else: 
-                        print("celula vazia, amigo")
-                        executar = False
-                    
+                        executar = False                
                     if executar:
                         erguer(lista,pos_vetor,jogo,fundir)
                         jogo.modo = "espectador"
@@ -366,7 +317,6 @@ def preparar_obra(jogo, lista):
                         return False
 
         jogo.clock.tick(60)
-
 
 
 
@@ -395,6 +345,7 @@ def catalogo(jogo, lista, desfocar, voltar, ant, prox,livrpaginatual, flipar):
     if flipar == True: pygame.display.flip()
 
 
+
 def texto(frase, cor, x, y):
     font = pygame.font.Font(None,30)
     display_surface = pygame.display.get_surface()
@@ -403,5 +354,53 @@ def texto(frase, cor, x, y):
     display_surface.blit(debug_surf,debug_rect)
 
 
-def fundir(jogo, lista, pos_vetor, duas, esquerda, direita):
-    pass
+def fusao(jogo, lista, pos_vetor, fundir):
+
+    if fundir == "esquerda":
+        if lista[pos_vetor-2].situacao[3] == "4":
+            lista[pos_vetor-4].situacao = "_1-6"            
+            lista[pos_vetor-3].situacao = "_2-6"
+            lista[pos_vetor-2].situacao = "_3-6"            
+            lista[pos_vetor-1].situacao = "_4-6"
+            lista[pos_vetor].situacao = "_5-6"
+            lista[pos_vetor+1].situacao = "_6-6"
+        else:
+            lista[pos_vetor-2].situacao = "_1-4"            
+            lista[pos_vetor-1].situacao = "_2-4"
+            lista[pos_vetor].situacao = "_3-4"
+            lista[pos_vetor+1].situacao = "_4-4"
+
+    elif fundir == "direita":
+        if lista[pos_vetor+2].situacao[3] == "4":
+            lista[pos_vetor].situacao = "_1-6"
+            lista[pos_vetor+1].situacao = "_2-6"
+            lista[pos_vetor+2].situacao = "_3-6"
+            lista[pos_vetor+3].situacao = "_4-6"
+            lista[pos_vetor+4].situacao = "_5-6"
+            lista[pos_vetor+5].situacao = "_6-6"
+        else:
+            lista[pos_vetor].situacao = "_1-4"
+            lista[pos_vetor+1].situacao = "_2-4"
+            lista[pos_vetor+2].situacao = "_3-4"
+            lista[pos_vetor+3].situacao = "_4-4"
+
+    elif fundir == "esquerda e direita":
+        lista[pos_vetor-2].situacao = "_1-6"
+        lista[pos_vetor-1].situacao = "_2-6"
+        lista[pos_vetor].situacao = "_3-6"
+        lista[pos_vetor+1].situacao = "_4-6"
+        lista[pos_vetor+2].situacao = "_5-6"
+        lista[pos_vetor+3].situacao = "_6-6"
+    
+    lista[pos_vetor-4].obj = None            
+    lista[pos_vetor-3].obj = None
+    lista[pos_vetor-2].obj = None
+    lista[pos_vetor-1].obj = None
+    lista[pos_vetor].obj = None
+    lista[pos_vetor+1].obj = None
+    lista[pos_vetor+2].obj = None
+    lista[pos_vetor+3].obj = None
+    lista[pos_vetor+4].obj = None
+    lista[pos_vetor+5].obj = None
+
+
