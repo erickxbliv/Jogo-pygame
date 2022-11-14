@@ -44,7 +44,7 @@ def menu(jogo):
     carregar = False
 
     if dificuldade == "facil": 
-        jogo.dinheiro = 5000     #quanto seria bom?
+        jogo.dinheiro = 99999999     #quanto seria bom?
         jogo.sobresalas.lucrodia = 20
         jogo.lotacao = 12
     else: 
