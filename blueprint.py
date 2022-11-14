@@ -41,7 +41,13 @@ def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo
     ide = 1
 
     while parar == False:
-        
+
+        a = ((ide-1) // 21) #representa o i na matriz
+        b = (ide-1) % 21 #representa o j na matriz
+        b = b * 51 #o j na matriz representa a largura
+        a = a * 93 #o i na matriz representa a altura
+        lista[ide-1].coordenadas = b, a
+
         if (ide >=1 and ide <= 7) or (ide >=22 and ide <= 26):
             lista[ide-1].bloqueada = True
         else:
@@ -50,11 +56,7 @@ def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo
             lista[ide-1].consumo = 0
             lista[ide-1].pretendente = "nenhuma"
 
-            a = ((ide-1) // 21) #representa o i na matriz
-            b = (ide-1) % 21 #representa o j na matriz
-            b = b * 51 #o j na matriz representa a largura
-            a = a * 93 #o i na matriz representa a altura
-            lista[ide-1].coordenadas = b, a
+            #as coordenadas ficavam aqui
 
         if ide in aleatorios and lista[ide-1].bloqueada == False: lista[ide-1].pedra = True
         else: lista[ide-1].pedra = False
@@ -125,3 +127,4 @@ def iniciar_generico(lista, dados):         #enviar apenas dados do menu ou todo
         lista[contagem].imagem()
         print(vars(lista[contagem]))            #teste
         contagem += 1
+    

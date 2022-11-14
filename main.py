@@ -31,18 +31,19 @@ class geral:
         self.construirtipo = None
         self.sobresalas = None
 
-        self.dinheiro = None
-        self.energia = None
-        self.comida = None
-        self.agua = None
+        self.dinheiro = 0
+        self.energia = 1000         #se chegar a zero acaba
+        self.comida = 1000
+        self.agua = 1000
+
+        self.moradores = None       #se chegar a zero, game over
+        self.lotacao = None
 
     def menu(self):
         pass
 
     def ciclonoitedia(self, x):
-        #fdeeb1
         self.fuso = pygame.image.load(path.join('fundo', str(x) + 'horas.png'))
-    #dar um pouco de dinheiro pra pessoa pelo menos sobreviver
 
 
 jogo = geral()
@@ -52,21 +53,23 @@ menu.menu(jogo)
 if jogo.dados.carregar == False:
     blueprint.iniciar_generico(celulas.lista,jogo.dados)
     blueprint.salvar(celulas.lista,jogo)
-else: blueprint.carregar(celulas.lista,jogo)
 
-#iconesistema = pygame.image.load(path.join('sistema', 'sistema.png'))
-#fundo = pygame.image.load(path.join('cenario', 'dia.png'))
-#fundo_noite = pygame.image.load(path.join('cenario', 'noite.png'))
-#configuracoes = pygame.image.load("configuracoes.png")   #pode ficar "alocado" na celula 1 (0,0), e assim se sabe se foi aberta. 
-
-#sera se compensava eu ter os dados do jogo numa classe?
-#preto = 0, 0, 0
-horario = 1
-x = 12.0
+    dwellers.inicializar(celulas.lista)
+    funcoes.empregar_Dw_Cl(dwellers.lista[0],celulas.lista[27])
+    jogo.moradores = 1
+else:
+    blueprint.carregar(celulas.lista,jogo)
+    dwellers.lista.clear()     #tem q zerar pois se n ja comecaria com 1
+    
+jogo.sobresalas.calcconsumo()
+horario = ponteiro = 12.0
 #modos: espectador - visualizar o bunker, construir - visualizar onde construir, espiar - assistir uma sala individualmente
-#clock tick
 
 while True:
+
+#verificar como estao os dados, pra dar game over ou continuar. aqui tambem e consumida a vida e saude quando abaixo do minimo
+    print(jogo.energia, jogo.sobresalas.consumo)
+    jogo.sobresalas.calcconsumo()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
@@ -83,15 +86,34 @@ while True:
                 if pos_vetor == 0:
                     menu.sistema(jogo,celulas.lista)
 
+                elif celulas.lista[pos_vetor].morador != None and pos_vetor >= 21 and pos_vetor <= 25:
+                        dwellers.lista.append(celulas.lista[pos_vetor].morador)
+                        jogo.moradores += 1
+                        celulas.lista[pos_vetor].morador.celula = "intervalo"     #sera se isso da erro?
+                        celulas.lista[pos_vetor].morador = None
+                        
                 elif celulas.lista[pos_vetor].pedra == True:
                     funcoes.minerar(jogo, celulas.lista[pos_vetor])
                     funcoes.pretendencia(celulas.lista,pos_vetor,True)
 
     funcoes.animacao(jogo, celulas.lista,True)
 
-    jogo.ciclonoitedia(int(x))
-    x += 0.01
-    if x > 24.0:    #24 = max de imagens
-        x = 1.0
+
+    if int(ponteiro) != int(horario):
+        jogo.ciclonoitedia(int(horario))
+        ponteiro = horario
+
+        if jogo.agua < ((jogo.sobresalas.gastoagua * jogo.moradores) // 24): jogo.agua = 0
+        else: jogo.agua = jogo.agua - ((jogo.sobresalas.gastoagua * jogo.moradores) // 24)
+        if jogo.comida < ((jogo.sobresalas.gastocomida * jogo.moradores) // 24): jogo.comida = 0
+        else: jogo.comida = jogo.comida - ((jogo.sobresalas.gastocomida * jogo.moradores) // 24)
+        if jogo.energia < (jogo.sobresalas.consumo // 24): jogo.energia = 0
+        else: jogo.energia = jogo.energia - (jogo.sobresalas.consumo // 24)
+
+    horario += 0.01
+    if horario > 24.0:    #24 = max de imagens
+        horario = 1.0
         jogo.dinheiro += jogo.sobresalas.lucrodia
+    
+        #aqui tambem acontecem os consumos, na vdd nao melhor q seja ao passar das horas mesmo
     jogo.clock.tick(60)
