@@ -17,6 +17,8 @@ def animacao(jogo, lista, flipar):
     jogo.janela.blit(jogo.fundo, (0,0))
     jogo.janela.blit(jogo.iconesistema, (0,0))
 
+    teste = pygame.image.load(path.join('personagens', 'teste.png'))
+
     if jogo.modo == "construir":
         contorno1 = pygame.image.load(path.join('sistema', 'constrorno1.png'))
         contorno2 = pygame.image.load(path.join('sistema', 'constrorno2.png'))
@@ -28,25 +30,16 @@ def animacao(jogo, lista, flipar):
         if lista[contagem].obj != None:
             jogo.janela.blit(lista[contagem].obj,lista[contagem].coordenadas)
 
+
+        if lista[contagem].morador != None:
+            jogo.janela.blit(teste, lista[contagem].coordenadas)
+
+
+
         if jogo.modo == "construir":
             if jogo.construirtipo == "elevador":
                 if lista[contagem].pretendente == "total" or lista[contagem].pretendente == "vertical":
                     jogo.janela.blit(contorno1,lista[contagem].coordenadas)
-
-                    #------- n sei
-        
-            # elif jogo.construirtipo == "treinamento":
-            #     b = (contagem) % 21
-
-            #     if lista[contagem].pretendente == "total":
-            #         ctg = contagem
-            #         if lista[ctg-1].vazio and not lista[ctg-1].pedra and lista[ctg-2].vazio and not lista[ctg-2].pedra and b > 1:
-            #             jogo.janela.blit(contorno3,lista[contagem-2].coordenadas)
-
-            #         elif lista[ctg+1].vazio and not lista[ctg+1].pedra and lista[ctg+2].vazio and not lista[ctg+2].pedra and b < 19:
-            #             jogo.janela.blit(contorno3,lista[contagem].coordenadas)
-            #         #-------- n sei
-        
 
             else:
                 b = (contagem) % 21
@@ -64,12 +57,9 @@ def animacao(jogo, lista, flipar):
                         #jogo.sobresalas.testduplas.append(ctg+1)
 
         contagem += 1
-    hud(jogo)
+    HUD(jogo)
     if flipar == True: pygame.display.flip()
 
-
-def hud(jogo):
-    pass
 
 def minerar(jogo, celula):
 
@@ -194,6 +184,7 @@ def erguer(lista, pos_vetor, jogo, fundir):
         if jogo.construirtipo == "quarto":
             jogo.dinheiro -= jogo.sobresalas.preco[0][1]
             x = 1
+            jogo.lotacao += 2
         elif jogo.construirtipo == "cozinha":
             jogo.dinheiro -= jogo.sobresalas.preco[0][2]
             x = 2
@@ -407,4 +398,40 @@ def fusao(jogo, lista, pos_vetor, fundir):
     lista[pos_vetor+4].obj = None
     lista[pos_vetor+5].obj = None
 
+
+def empregar_Dw_Cl(dweller,celula):
+    dweller.celula = celula
+    celula.morador = dweller
+
+
+
+def HUD(jogo):
+
+    icones = pygame.image.load(path.join('sistema', 'HUD.png'))
+    jogo.janela.blit(icones,(0,651))
+
+    #fundo = pygame.Surface(1071,701)
+
+    #ja que o limite e 1000, o minimo pode diminuir inves
+    energia_4pontas = ELESTE, ESUL, ELARGURA, EALTURA =  180 , 669, (jogo.energia // 10), 13 
+    agua_4pontas = ALESTE, ASUL, ALARGURA, AALTURA = 360 , 669, (jogo.agua // 10), 13
+    comida_4pontas = CLESTE, CSUL, CLARGURA, CALTURA = 540 , 669, (jogo.comida // 10), 13
+
+    if jogo.agua >= (jogo.moradores * jogo.sobresalas.minimo): cor = 0, 255, 0
+    else: cor = 255, 0, 0
+    pygame.draw.rect(jogo.janela,cor,agua_4pontas)
+
+
+    if jogo.comida >= (jogo.moradores * jogo.sobresalas.minimo): cor = 0, 255, 0
+    else: cor = 255, 0, 0
+    pygame.draw.rect(jogo.janela,cor,comida_4pontas)
+
+    if jogo.energia >= jogo.sobresalas.consumo: cor = 0, 255, 0
+    else: cor = 255, 0, 0
+    pygame.draw.rect(jogo.janela,cor,energia_4pontas)
+
+    branco = 255, 255, 255
+    texto(jogo.dinheiro,branco,720,665)
+    frase = str(jogo.moradores) + "/" + str(jogo.lotacao)
+    texto(frase,branco,885,665)
 

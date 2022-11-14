@@ -25,6 +25,9 @@ class celulas:
         self.obj = None
 
         self.sala = None
+        self.morador = None
+        #se ja produziu oq ela faz
+        
         #vizinhos? ajudaria a demarcar os pretendentes
         #direções de passagem
         #indicar que esta fundido
