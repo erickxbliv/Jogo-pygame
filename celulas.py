@@ -26,6 +26,8 @@ class celulas:
 
         self.sala = None
         self.morador = None
+
+        self.idle = None
         #se ja produziu oq ela faz
         
         #vizinhos? ajudaria a demarcar os pretendentes

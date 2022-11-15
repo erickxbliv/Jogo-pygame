@@ -29,21 +29,40 @@ class morador:
         self.inteligencia = 1   #pro laboratorio                #SIGLA: CIFRA
 
 
-    def Mnome(self, sexo):
+    def Mnome(self):
         seed()
 
-        randint(1,20)
         nomeM = ["erick","emanuel","jorge","joao","vitor","marcos","daniel","luan","edson","leandro","alexandre","carlos","samuel","assis"#14
-            "franklin","henrique","gabriel","juliano","diogo","josafa","junior"]
+            "franklin","henrique","gabriel","juliano","diogo","josafa","junior","igor","luiz","raimundo"]
 
+        nomeF = ["mariana","julia","clara","flavia","marta","maura","laura","maria","anna","livia","lavinia","jane","estefani","ysis" #14
+            "elisa","monica","lurdes","lara","nayara","isabel","rosa","marisol","adriana","sofia","solange","elizabeth","helena","alice"
+            "yasmin","milena"] #16
 
-    def Msobrenome(self, sexo):
+        if self.sexo == "M":
+            max = 24
+            valor = randint(1,max)
+            self.nome = nomeM[valor-1]
+        elif self.sexo == "F":
+            max = 30
+            valor = randint(1,max)
+            self.nome = nomeF[valor-1]
+
+    def Msobrenome(self):
         seed()
 
-        randint(1,20)
+        sobrenomes = ["pontes","assis","ribeiro","pinheiro","brito","sousa","lima","xenofonte","freitas","martins","oliveira","sales"
+            "torres","almeida","azevedo","braga","queiroz","rocha","siqueira","teixeira","magalhaes","matos","silva","castro"
+            "siebra","gonçalvez","macedo","ferreira","fonseca","gomes","santos","cardoso","saraiva","velozo","carvalho","duarte"
+            "alvez","lopez","dias","costa","brasil","santana","mendes","andrade","soares","barbosa","amaral","feitosa","tavares","reis" #50
+            "aguiar","mendonça","leal","novaes","cabral","araujo","correia","barros","bezerra","viana","aquino","peixoto","pires","borges"] #14
+
+        valor = randint(1,60)
+        self.sobrenome = sobrenomes[valor-1]
+        
 
     def Mnomecompleto(self):
-        self.nomecompleto = (self.nome," ",self.sobrenome)
+        self.nomecompleto = (self.nome , " " , self.sobrenome)
         
 
 
@@ -62,7 +81,6 @@ def atribuir(dweller):
     dweller.inteligencia += CIFRA[1]
 
 
-
 def inicializar(celulas):
 
     novo_fila = morador()
@@ -71,17 +89,21 @@ def inicializar(celulas):
 
     novo_fila.id = 2
     novo_fila.sexo = "M"
-    novo_fila.nome = novo_fila.Mnome(novo_fila.sexo)
-    novo_fila.sobrenome = novo_fila.Msobrenome(novo_fila.sexo)
+    novo_fila.Mnome()
+    print(novo_fila.nome)
+    novo_fila.Msobrenome()
 
+    print(vars(novo_fila))
     novo_fila.Mnomecompleto()
+    print(vars(novo_fila))
+
     atribuir(novo_fila)
     empregar_Dw_Cl(novo_fila,celulas[21])
 
     novo_fila.id = 3
     novo_fila.sexo = "F"
-    novo_fila.nome = novo_fila.Mnome(novo_fila.sexo)
-    novo_fila.sobrenome = novo_fila.Msobrenome(novo_fila.sexo)
+    novo_fila.Mnome()
+    novo_fila.Msobrenome()
 
     novo_fila.Mnomecompleto()
     atribuir(novo_fila)
@@ -89,8 +111,8 @@ def inicializar(celulas):
 
     novo_fila.id = 4
     novo_fila.sexo = "M"
-    novo_fila.nome = novo_fila.Mnome(novo_fila.sexo)
-    novo_fila.sobrenome = novo_fila.Msobrenome(novo_fila.sexo)
+    novo_fila.Mnome()
+    novo_fila.Msobrenome()
 
     novo_fila.Mnomecompleto()
     atribuir(novo_fila)
@@ -98,8 +120,8 @@ def inicializar(celulas):
 
     novo_fila.id = 5
     novo_fila.sexo = "F"
-    novo_fila.nome = novo_fila.Mnome(novo_fila.sexo)
-    novo_fila.sobrenome = novo_fila.Msobrenome(novo_fila.sexo)
+    novo_fila.Mnome()
+    novo_fila.Msobrenome()
 
     novo_fila.Mnomecompleto()
     atribuir(novo_fila)
@@ -107,8 +129,8 @@ def inicializar(celulas):
 
     novo_fila.id = 6
     novo_fila.sexo = "F"
-    novo_fila.nome = novo_fila.Mnome(novo_fila.sexo)
-    novo_fila.sobrenome = novo_fila.Msobrenome(novo_fila.sexo)
+    novo_fila.Mnome()
+    novo_fila.Msobrenome()
 
     novo_fila.Mnomecompleto()
     atribuir(novo_fila)

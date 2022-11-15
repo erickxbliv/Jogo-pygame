@@ -401,6 +401,10 @@ def fusao(jogo, lista, pos_vetor, fundir):
 
 
 def empregar_Dw_Cl(dweller,celula):
+
+    #if dweller.celula != None: dweller.celula.morador = None
+    #if celula.morador != None: celula.morador.celula = None
+
     dweller.celula = celula
     celula.morador = dweller
 

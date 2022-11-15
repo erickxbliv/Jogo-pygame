@@ -68,7 +68,7 @@ horario = ponteiro = 12.0
 while True:
 
 #verificar como estao os dados, pra dar game over ou continuar. aqui tambem e consumida a vida e saude quando abaixo do minimo
-    print(jogo.energia, jogo.sobresalas.consumo)
+    print(jogo.energia, jogo.sobresalas.consumo,(jogo.sobresalas.producao[4] * jogo.sobresalas.qtd_EQCAEDRT[4]))
     #print(jogo.agua,(jogo.moradores * jogo.sobresalas.minimo))
 
     for event in pygame.event.get():
@@ -92,21 +92,22 @@ while True:
                     celulas.lista[pos_vetor].morador.celula = "intervalo"     #sera se isso da erro?
                     celulas.lista[pos_vetor].morador = None
 
-                
+                elif celulas.lista[pos_vetor].vazio != None and not celulas.lista[pos_vetor].vazio:
+                    if celulas.lista[pos_vetor].idle == True:
+                        pass
+                    else: menu.espiar(jogo,celulas.lista,dwellers.lista,pos_vetor)
                         
                 elif celulas.lista[pos_vetor].pedra == True:
                     print("ola")
                     funcoes.minerar(jogo, celulas.lista[pos_vetor])
                     funcoes.pretendencia(celulas.lista,pos_vetor,True)
 
-                elif celulas.lista[pos_vetor].vazio != None and celulas.lista[pos_vetor].vazio != False:
-                    print("ei")
-                    pass
+                
 
     funcoes.animacao(jogo, celulas.lista,True)
 
 
-    if int(ponteiro) != int(horario):
+    if int(ponteiro) != int(horario):                       #isso aq devia acontecer dentro de animacao
         jogo.ciclonoitedia(int(horario))
         ponteiro = horario
 
@@ -117,7 +118,7 @@ while True:
         if jogo.energia < (jogo.sobresalas.consumo // 24): jogo.energia = 0
         else: jogo.energia = jogo.energia - (jogo.sobresalas.consumo // 24)
 
-    horario += 0.5
+    horario += 0.01
     if horario > 24.0:    #24 = max de imagens
         horario = 1.0
         jogo.dinheiro += jogo.sobresalas.lucrodia

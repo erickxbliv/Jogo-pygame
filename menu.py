@@ -204,3 +204,66 @@ def selecionarsala(jogo,lista):
                     else: jogo.construirtipo = None
 
         jogo.clock.tick(60)
+
+
+
+def espiar(jogo,lista,registro,pos_vetor):
+    jogo.modo = "espiar"
+
+    while True:
+
+        funcoes.animacao(jogo,lista,False)
+        menu = pygame.image.load(path.join('sistema', 'espiarnormal.png'))
+
+        voltar = pygame.image.load(path.join('sistema', 'voltar.png'))
+        if lista[pos_vetor].situacao[3] == "1":
+            contorno = pygame.image.load(path.join('sistema', 'contorno1.png'))
+            menu = pygame.image.load(path.join('sistema', 'espiarsimples.png'))
+            maximo = pos_vetor
+        elif lista[pos_vetor].situacao[3] == "2":
+            contorno = pygame.image.load(path.join('sistema', 'contorno2.png'))
+            if lista[pos_vetor].situacao[1] == "2": pos_vetor -= 1
+            maximo = pos_vetor + 1
+        elif lista[pos_vetor].situacao[3] == "4":
+            contorno = pygame.image.load(path.join('sistema', 'contorno4.png'))
+            valor = int(lista[pos_vetor].situacao[1]) - 1
+            pos_vetor = pos_vetor - valor
+            maximo = pos_vetor + 3
+        elif lista[pos_vetor].situacao[3] == "6":
+            contorno = pygame.image.load(path.join('sistema', 'contorno6.png'))
+            valor = int(lista[pos_vetor].situacao[1]) - 1
+            pos_vetor = pos_vetor - valor
+            maximo = pos_vetor + 5
+
+        else: print("erro") #TESTE
+
+        if (pos_vetor + 1) > 84: coordenadas = (357,186)
+        else: coordenadas = (357,372)
+
+        jogo.janela.blit(contorno,lista[pos_vetor].coordenadas)
+        jogo.janela.blit(menu,coordenadas)
+        jogo.janela.blit(voltar,(0,0))
+
+        pygame.display.flip()
+        
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+
+                position = pos_x, pos_y = pygame.mouse.get_pos()
+                pos_vetor2 = funcoes.achar_celula(position)
+
+                if pos_vetor2 == 0:
+                    jogo.modo = "espectador"
+                    return
+
+                if pos_vetor2 >= pos_vetor and pos_vetor2 <= maximo:
+                    jogo.modo = "espectador"
+                    return
+
+
+
+
+        
+
