@@ -212,7 +212,7 @@ def erguer(lista, pos_vetor, jogo, fundir):
 
 
     if fundir != None: fusao(jogo,lista,pos_vetor,fundir)
-
+    jogo.sobresalas.calcconsumo()
     sucesso =  pygame.mixer.Sound(path.join('sons','obrafinalizada.wav'))
     pygame.mixer.Sound.play(sucesso)
 
@@ -394,9 +394,10 @@ def fusao(jogo, lista, pos_vetor, fundir):
     lista[pos_vetor].obj = None
     lista[pos_vetor+1].obj = None
     lista[pos_vetor+2].obj = None
-    lista[pos_vetor+3].obj = None
-    lista[pos_vetor+4].obj = None
-    lista[pos_vetor+5].obj = None
+    if pos_vetor <= 143:
+        lista[pos_vetor+3].obj = None
+        lista[pos_vetor+4].obj = None
+        lista[pos_vetor+5].obj = None
 
 
 def empregar_Dw_Cl(dweller,celula):
@@ -426,7 +427,8 @@ def HUD(jogo):
     else: cor = 255, 0, 0
     pygame.draw.rect(jogo.janela,cor,comida_4pontas)
 
-    if jogo.energia >= jogo.sobresalas.consumo: cor = 0, 255, 0
+    #if jogo.energia >= (jogo.sobresalas.consumo): cor = 0, 255, 0 #NA VDD DEVERIA SER O (CONSUMO - PRODUCAO POR HORA)
+    if jogo.energia >= (jogo.sobresalas.consumo - (jogo.sobresalas.producao[4] * jogo.sobresalas.qtd_EQCAEDRT[4])): cor = 0, 255, 0 #TESTE
     else: cor = 255, 0, 0
     pygame.draw.rect(jogo.janela,cor,energia_4pontas)
 

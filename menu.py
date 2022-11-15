@@ -60,7 +60,7 @@ def menu(jogo):
 #fazer aqui todo e qualquer menu, qualquer icone verdinho que representar uma função era bom ficar aqui
 
 
-def sistema(jogo, lista):
+def sistema(jogo, lista, registro):
 
     desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
     subsistemas = pygame.image.load(path.join('sistema', 'subsistemas.png'))

@@ -69,7 +69,7 @@ while True:
 
 #verificar como estao os dados, pra dar game over ou continuar. aqui tambem e consumida a vida e saude quando abaixo do minimo
     print(jogo.energia, jogo.sobresalas.consumo)
-    jogo.sobresalas.calcconsumo()
+    #print(jogo.agua,(jogo.moradores * jogo.sobresalas.minimo))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
@@ -84,17 +84,24 @@ while True:
 
                 #print(pos_vetor)
                 if pos_vetor == 0:
-                    menu.sistema(jogo,celulas.lista)
+                    menu.sistema(jogo,celulas.lista,dwellers.lista)
 
                 elif celulas.lista[pos_vetor].morador != None and pos_vetor >= 21 and pos_vetor <= 25:
-                        dwellers.lista.append(celulas.lista[pos_vetor].morador)
-                        jogo.moradores += 1
-                        celulas.lista[pos_vetor].morador.celula = "intervalo"     #sera se isso da erro?
-                        celulas.lista[pos_vetor].morador = None
+                    dwellers.lista.append(celulas.lista[pos_vetor].morador)
+                    jogo.moradores += 1
+                    celulas.lista[pos_vetor].morador.celula = "intervalo"     #sera se isso da erro?
+                    celulas.lista[pos_vetor].morador = None
+
+                
                         
                 elif celulas.lista[pos_vetor].pedra == True:
+                    print("ola")
                     funcoes.minerar(jogo, celulas.lista[pos_vetor])
                     funcoes.pretendencia(celulas.lista,pos_vetor,True)
+
+                elif celulas.lista[pos_vetor].vazio != None and celulas.lista[pos_vetor].vazio != False:
+                    print("ei")
+                    pass
 
     funcoes.animacao(jogo, celulas.lista,True)
 
@@ -110,7 +117,7 @@ while True:
         if jogo.energia < (jogo.sobresalas.consumo // 24): jogo.energia = 0
         else: jogo.energia = jogo.energia - (jogo.sobresalas.consumo // 24)
 
-    horario += 0.01
+    horario += 0.5
     if horario > 24.0:    #24 = max de imagens
         horario = 1.0
         jogo.dinheiro += jogo.sobresalas.lucrodia
