@@ -62,7 +62,7 @@ class morador:
         
 
     def Mnomecompleto(self):
-        self.nomecompleto = (self.nome , " " , self.sobrenome)
+        self.nomecompleto = (self.nome + " " + self.sobrenome)
         
 
 
@@ -90,16 +90,17 @@ def inicializar(celulas):
     novo_fila.id = 2
     novo_fila.sexo = "M"
     novo_fila.Mnome()
-    print(novo_fila.nome)
+    #print(novo_fila.nome)
     novo_fila.Msobrenome()
 
-    print(vars(novo_fila))
+    #print(vars(novo_fila))
     novo_fila.Mnomecompleto()
-    print(vars(novo_fila))
+    #print(vars(novo_fila))
 
     atribuir(novo_fila)
     empregar_Dw_Cl(novo_fila,celulas[21])
 
+    novo_fila = morador()
     novo_fila.id = 3
     novo_fila.sexo = "F"
     novo_fila.Mnome()
@@ -109,6 +110,7 @@ def inicializar(celulas):
     atribuir(novo_fila)
     empregar_Dw_Cl(novo_fila,celulas[22])
 
+    novo_fila = morador()
     novo_fila.id = 4
     novo_fila.sexo = "M"
     novo_fila.Mnome()
@@ -118,6 +120,7 @@ def inicializar(celulas):
     atribuir(novo_fila)
     empregar_Dw_Cl(novo_fila,celulas[23])
 
+    novo_fila = morador()
     novo_fila.id = 5
     novo_fila.sexo = "F"
     novo_fila.Mnome()
@@ -127,6 +130,7 @@ def inicializar(celulas):
     atribuir(novo_fila)
     empregar_Dw_Cl(novo_fila,celulas[24])
 
+    novo_fila = morador()
     novo_fila.id = 6
     novo_fila.sexo = "F"
     novo_fila.Mnome()

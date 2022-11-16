@@ -29,14 +29,63 @@ def cutscene():
 def menu(jogo):
 
 
-    #dados.zerar(self)
-    cutscene()
+    
+    
 
     #opcoes: iniciar novo jogo, carregar jogo, manual, opcoes ou sair
     #se escolher iniciar jogo, pergunta posicao, nome do save e dificuldade
         #volta pra main e chama a funcao criar generico (depende dif.), assim salvando num arquivo naquela posicao e com aquele nome
 
-    #criar aqui o objeto da classe dados
+    
+    #aqui vai ficar a musica tocando
+
+    fundo = pygame.image.load(path.join('menu', 'menu.png'))
+    carro = pygame.image.load(path.join('menu', 'carro.png'))
+    roda = pygame.image.load(path.join('menu', '1roda.png'))
+
+
+    coordenadas = [-281,574]
+    roda1 = [14,85]
+    roda2 = [55,87]
+    roda3 = [208,83]
+    tempo = 45
+    angulo = 1
+
+    while True:
+
+        jogo.janela.blit(fundo, (0,0))
+        jogo.janela.blit(carro, coordenadas)
+        jogo.janela.blit(roda, (roda1[0]+coordenadas[0],659))
+        jogo.janela.blit(roda, (roda2[0]+coordenadas[0],661))
+        jogo.janela.blit(roda, (roda3[0]+coordenadas[0],657))
+
+        if angulo == 30: angulo = 1
+        else: angulo += 1
+        roda = pygame.image.load(path.join('menu', str(angulo) + 'roda.png'))
+
+        if coordenadas[0] == 1071:
+            coordenadas[0] = -281
+            angulo = 1
+        else: coordenadas[0] += 2
+
+        pygame.display.flip()
+
+
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                position = pos_x, pos_y = pygame.mouse.get_pos()
+                return
+            
+        jogo.clock.tick(tempo)
+
+
+
+
+
+
+
     
     posicao = "1"
     nome = "erick"
@@ -208,9 +257,18 @@ def selecionarsala(jogo,lista):
 
 
 def espiar(jogo,lista,registro,pos_vetor):
+    
     jogo.modo = "espiar"
 
+    evoluir = None
+    demolir = None
+    trabalhadores = None
+    producao = None
+
     while True:
+
+
+
 
         funcoes.animacao(jogo,lista,False)
         menu = pygame.image.load(path.join('sistema', 'espiarnormal.png'))

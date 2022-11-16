@@ -68,7 +68,7 @@ horario = ponteiro = 12.0
 while True:
 
 #verificar como estao os dados, pra dar game over ou continuar. aqui tambem e consumida a vida e saude quando abaixo do minimo
-    print(jogo.energia, jogo.sobresalas.consumo,(jogo.sobresalas.producao[4] * jogo.sobresalas.qtd_EQCAEDRT[4]))
+    #print(jogo.energia, jogo.sobresalas.consumo,(jogo.sobresalas.producao[4] * jogo.sobresalas.qtd_EQCAEDRT[4]))
     #print(jogo.agua,(jogo.moradores * jogo.sobresalas.minimo))
 
     for event in pygame.event.get():
@@ -94,11 +94,11 @@ while True:
 
                 elif celulas.lista[pos_vetor].vazio != None and not celulas.lista[pos_vetor].vazio:
                     if celulas.lista[pos_vetor].idle == True:
-                        pass
+                        pass #aqui acontece quando vai coletar a producao da celula
                     else: menu.espiar(jogo,celulas.lista,dwellers.lista,pos_vetor)
                         
                 elif celulas.lista[pos_vetor].pedra == True:
-                    print("ola")
+                    #print("ola")
                     funcoes.minerar(jogo, celulas.lista[pos_vetor])
                     funcoes.pretendencia(celulas.lista,pos_vetor,True)
 

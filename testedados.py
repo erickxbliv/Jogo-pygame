@@ -17,6 +17,8 @@ class dados:
         self.pagina1 = [200//4,100//4,200//4,500//4]
 
         self.preco = [[100,80,200,200],[200,100,200,500]]
+        #self.preco = [100,80,200,200,200,100,200,500]
+        self.precoevoluir = 1580
         self.precoatual = None
 
         self.lucrodia = None
@@ -41,4 +43,14 @@ class dados:
         while qtd < 8:
             self.consumo += (self.qtd_EQCAEDRT[qtd] * self.cnsm_EQCAEDRT[qtd])
             qtd += 1
+
+    def preco_evoluir(self):
+        self.precoevoluir = self.preco[0][0] + self.preco[0][1] + self.preco[0][2] + self.preco[0][3]
+        self.precoevoluir += self.preco[1][0] + self.preco[1][1] + self.preco[1][2] + self.preco[1][3]
+        self.precoevoluir = self.precoevoluir // 8
+
+    def producao_cel():
+        pass #a producao de todas as salas vai ser uma taxa fixa. a producao final de cada celula e a producao * status da CIFRA * ?
+        #a producao tambem varia o tempo. mas para todas, o tempo e fixo para cada level
+        #cada celula tem uma producao individual
 

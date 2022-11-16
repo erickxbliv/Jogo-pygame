@@ -402,8 +402,14 @@ def fusao(jogo, lista, pos_vetor, fundir):
 
 def empregar_Dw_Cl(dweller,celula):
 
-    #if dweller.celula != None: dweller.celula.morador = None
-    #if celula.morador != None: celula.morador.celula = None
+    #print("----------------------------------")
+
+    if dweller.celula != None: 
+        dweller.celula.morador = None
+        #print("ola")
+    if celula.morador != None: 
+        celula.morador.celula = None
+        #print("alo")
 
     dweller.celula = celula
     celula.morador = dweller
@@ -440,4 +446,40 @@ def HUD(jogo):
     texto(jogo.dinheiro,branco,720,665)
     frase = str(jogo.moradores) + "/" + str(jogo.lotacao)
     texto(frase,branco,885,665)
+
+
+def evoluir(jogo,lista,pos_vetor):
+
+    jogo.sobresalas.preco_evoluir()
+    if lista[pos_vetor].lvl == "3":
+        pass #mostrar o erro e voltar.. talvez so transformar a seta em vermelha ou sla
+    elif jogo.dinheiro < jogo.sobresalas.precoevoluir:
+        pass #outro erro, sem dinheiro
+
+    lista[pos_vetor].lvl = str(int(lista[pos_vetor].lvl) + 1)
+    lista[pos_vetor+1].lvl = str(int(lista[pos_vetor+1].lvl) + 1)
+
+    lista[pos_vetor].obj = None
+    lista[pos_vetor+1].obj = None
+    if int(lista[pos_vetor].situacao[3]) >= "4":
+
+        lista[pos_vetor+2].lvl = str(int(lista[pos_vetor+2].lvl) + 1)
+        lista[pos_vetor+3].lvl = str(int(lista[pos_vetor+3].lvl) + 1)
+
+        lista[pos_vetor+2].obj = None
+        lista[pos_vetor+3].obj = None
+
+        if lista[pos_vetor].situacao[3] == "6":
+
+            lista[pos_vetor+4].lvl = str(int(lista[pos_vetor+4].lvl) + 1)
+            lista[pos_vetor+5].lvl = str(int(lista[pos_vetor+5].lvl) + 1)
+
+            lista[pos_vetor+4].obj = None
+            lista[pos_vetor+5].obj = None
+
+    
+
+
+def demolir():
+    pass
 
