@@ -1,5 +1,7 @@
 import pygame
 pygame.init()
+from pygame import mixer
+mixer.init()
 import os
 from os import path
 import sys
@@ -39,6 +41,9 @@ def menu(jogo):
 
     
     #aqui vai ficar a musica tocando
+
+    soundtrack =  pygame.mixer.Sound(path.join('sons','menu.wav'))
+    pygame.mixer.Sound.play(soundtrack)
 
     fundo = pygame.image.load(path.join('menu', 'menu.png'))
     carro = pygame.image.load(path.join('menu', 'carro.png'))
