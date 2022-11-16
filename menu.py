@@ -1,5 +1,6 @@
 import pygame
 pygame.init()
+import os
 from os import path
 import sys
 import funcoes
@@ -42,42 +43,86 @@ def menu(jogo):
     fundo = pygame.image.load(path.join('menu', 'menu.png'))
     carro = pygame.image.load(path.join('menu', 'carro.png'))
     roda = pygame.image.load(path.join('menu', '1roda.png'))
+    caminho = pygame.image.load(path.join('menu', 'caminho.png'))
 
+    iniciar = pygame.image.load(path.join('menu', 'iniciarjogo.png'))
+    if os.stat("save.json").st_size == 0: 
+        carregar = pygame.image.load(path.join('menu', 'Falsecarregar.png'))
+        save = False
+    else: 
+        carregar = pygame.image.load(path.join('menu', 'Truecarregar.png'))
+        save = True
+    manual = pygame.image.load(path.join('menu', 'manual.png'))
+    sair = pygame.image.load(path.join('menu', 'sair.png'))
 
     coordenadas = [-281,574]
     roda1 = [14,85]
     roda2 = [55,87]
     roda3 = [208,83]
     tempo = 45
-    angulo = 1
+    angulo = 1.0   #melhor ser float?
 
+    jogo.janela.blit(fundo, (0,0))
+    jogo.janela.blit(iniciar, (408,186))
+    jogo.janela.blit(carregar, (408,279))
+    jogo.janela.blit(manual, (408,372))
+    jogo.janela.blit(sair, (408,465))
+
+    load = False
+
+    #while tempo == 2.0:
     while True:
 
-        jogo.janela.blit(fundo, (0,0))
+        jogo.janela.blit(caminho, (0,575))
         jogo.janela.blit(carro, coordenadas)
         jogo.janela.blit(roda, (roda1[0]+coordenadas[0],659))
         jogo.janela.blit(roda, (roda2[0]+coordenadas[0],661))
         jogo.janela.blit(roda, (roda3[0]+coordenadas[0],657))
 
-        if angulo == 30: angulo = 1
-        else: angulo += 1
-        roda = pygame.image.load(path.join('menu', str(angulo) + 'roda.png'))
+        #jogo.janela.blit(roda, (0,0))
+
+        if angulo == 30.0: angulo = 1.0
+        else: angulo += 0.5
+        roda = pygame.image.load(path.join('menu', str(int(angulo)) + 'roda.png'))
 
         if coordenadas[0] == 1071:
             coordenadas[0] = -281
-            angulo = 1
+            angulo = 1.0
         else: coordenadas[0] += 2
 
         pygame.display.flip()
-
-
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
             if event.type == pygame.MOUSEBUTTONUP:
                 position = pos_x, pos_y = pygame.mouse.get_pos()
-                return
-            
+                pos_vetor = funcoes.achar_celula(position)
+
+                if pos_vetor >= 50 and pos_vetor <= 54:
+                    dificuldade = "facil"
+                    jogo.dinheiro = 5000
+                    jogo.sobresalas.lucrodia = 20
+                    jogo.lotacao = 12
+                    jogo.dados = dados(dificuldade,load,None,None)
+                    return
+                elif pos_vetor >= 71 and pos_vetor <= 75:
+                    if save == True:
+                        load = True
+                        jogo.dados = dados(None,load,None,None)
+                        return
+                elif pos_vetor >= 92 and pos_vetor <= 96:
+                    manual()
+                elif pos_vetor >= 113 and pos_vetor <= 114:
+                    sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_d:
+                    dificuldade = "dificil"
+                    jogo.dinheiro = 2500
+                    jogo.sobresalas.lucrodia = 10
+                    jogo.lotacao = 6
+                    jogo.dados = dados(dificuldade,load,None,None)
+                    return
+
         jogo.clock.tick(tempo)
 
 
