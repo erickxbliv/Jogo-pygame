@@ -74,7 +74,9 @@ virouodia =  pygame.mixer.Sound(path.join('sons','bomdia.wav'))
 
 while True:
 
-    if jogo.energia == 0 or not dwellers.lista:
+    #if jogo.energia == 0 or not dwellers.lista:
+    #print(jogo.moradores)
+    if not dwellers.lista or jogo.moradores == 0:
         menu.gameover(jogo)
 #verificar como estao os dados, pra dar game over ou continuar. aqui tambem e consumida a vida e saude quando abaixo do minimo
 #game over deleta o save
@@ -99,7 +101,7 @@ while True:
                 elif celulas.lista[pos_vetor].morador != None and pos_vetor >= 21 and pos_vetor <= 25:
                     dwellers.lista.append(celulas.lista[pos_vetor].morador)
                     jogo.moradores += 1
-                    celulas.lista[pos_vetor].morador.celula = "intervalo"     #sera se isso da erro?
+                    celulas.lista[pos_vetor].morador.celula = None     #sera se isso da erro?
                     celulas.lista[pos_vetor].morador = None
 
                 elif celulas.lista[pos_vetor].vazio != None and not celulas.lista[pos_vetor].vazio:
@@ -129,7 +131,7 @@ while True:
     funcoes.animacao(jogo, celulas.lista,True)
 
 
-    if int(ponteiro) != int(horario):                       #isso aq devia acontecer dentro de animacao
+    if int(ponteiro) != int(horario):                  
         jogo.ciclonoitedia(int(horario))
         ponteiro = horario
         
@@ -157,7 +159,9 @@ while True:
         if jogo.energia < (jogo.sobresalas.consumo // 24): jogo.energia = 0
         else: jogo.energia = jogo.energia - (jogo.sobresalas.consumo // 24)
 
+        #print("vou entrar")
         funcoes.sobrevivencia(jogo,celulas.lista,dwellers.lista)
+        #print("consegui.. agora:")
 
     horario += 0.01
     if horario > 24.0:    #24 = max de imagens

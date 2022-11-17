@@ -320,15 +320,15 @@ def espiar(jogo,lista,registro,pos_vetor):
 
     produzir = True
     if lista[pos_vetor].tipo == "cozinha":
-        prod = pygame.image.load(path.join('sistema', 'tipoproducaoA.png'))
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaoa.png'))
     elif lista[pos_vetor].tipo == "gerador":
-        prod = pygame.image.load(path.join('sistema', 'tipoproducaoF.png'))
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaof.png'))
     elif lista[pos_vetor].tipo == "tratamento":
-        prod = pygame.image.load(path.join('sistema', 'tipoproducaoR.png'))
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaor.png'))
     elif lista[pos_vetor].tipo == "renda":
-        prod = pygame.image.load(path.join('sistema', 'tipoproducaoI.png'))
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaoi.png'))
     elif lista[pos_vetor].tipo == "laboratorio":
-        prod = pygame.image.load(path.join('sistema', 'tipoproducaoI.png'))
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaoi.png'))
     else: produzir = False
 
     
@@ -471,5 +471,4 @@ def contratar(jogo,lista,registro):
 
 
         
-
 

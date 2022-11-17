@@ -457,7 +457,6 @@ def HUD(jogo):
 def evoluir(jogo,lista,pos_vetor):
 
     valeu =  pygame.mixer.Sound(path.join('sons','obrigado.wav'))
-    
 
     jogo.sobresalas.preco_evoluir()
     if lista[pos_vetor].lvl == "3":
@@ -489,6 +488,9 @@ def evoluir(jogo,lista,pos_vetor):
     jogo.dinheiro = jogo.dinheiro - jogo.sobresalas.precoevoluir
     pygame.mixer.Sound.play(valeu)
 
+    liberar_fusao(jogo,lista,pos_vetor)
+    
+
 
 
 
@@ -511,32 +513,39 @@ def sobrevivencia(jogo,lista,registro):
     
 
     while contagem <= max:
-        
-        barreira = 100 - registro[contagem].radiacao 
-        if vidamais: 
-            registro[contagem].vida += 1
-            if registro[contagem].vida > barreira: registro[contagem].vida = barreira
-        else: registro[contagem].vida -= 2
-
-        if radmais:
-            registro[contagem].radiacao += 2
+        #print("OLA")
+        if registro[contagem] != None:
             barreira = 100 - registro[contagem].radiacao 
-            if registro[contagem].vida > barreira: registro[contagem].vida = barreira
-        else: 
-            registro[contagem].radiacao -= 2
-            if registro[contagem].radiacao < 0: registro[contagem].radiacao = 0
+            if vidamais: 
+                registro[contagem].vida += 1
+                if registro[contagem].vida > barreira: registro[contagem].vida = barreira
+            else: registro[contagem].vida -= 2
 
-        if registro[contagem].vida == 0:
-            if registro[contagem].celula != None:
-                id = registro[contagem].celula.id
-                lista[id-1].morador = None
-            registro.pop(contagem)
-            morreu =  mixer.Sound(path.join('sons','morte.wav'))
-            mixer.Sound.play(morreu)
+            if radmais:
+                registro[contagem].radiacao += 2
+                barreira = 100 - registro[contagem].radiacao 
+                if registro[contagem].vida > barreira: registro[contagem].vida = barreira
+            else: 
+                registro[contagem].radiacao -= 2
+                if registro[contagem].radiacao < 0: registro[contagem].radiacao = 0
 
-            #musica
+            if registro[contagem].vida == 0:
+                if registro[contagem].celula != None:
+                    id = registro[contagem].celula.id
+                    #print(registro[contagem].celula)
+                    #print(vars(registro[contagem].celula))
+                    lista[id-1].morador = None
+                #registro.pop(contagem)     #ACHO MELHOR N REMOVER DA LISTA, PRA PODER ACESSAR PELO ID..
+                registro[contagem] = None
+                morreu =  mixer.Sound(path.join('sons','morte.wav'))
+                mixer.Sound.play(morreu)
+                jogo.moradores -= 1
+                #print("poxa..")
+                #musica
+            else: contagem += 1
         else: contagem += 1
         
+        #print("SAI, ",contagem, max)
 
 
    #tirar a vida e aumentar a radiacao dos dwellers se tiver pouca comida ou agua, isso a cada hora?
@@ -544,3 +553,80 @@ def sobrevivencia(jogo,lista,registro):
 
 
 
+
+
+
+
+
+def liberar_fusao(jogo,lista,pos_vetor):
+
+    b = (pos_vetor) % 21        #o pos_vetor tem que ser a direita
+    l = lista
+    p = pos_vetor
+    t = "total"
+    executar = True
+    fundir = None
+
+    
+
+    if l[p-1].tipo != None and l[p+2].tipo != None and b > 0 and b < 20:
+         if l[p].tipo == l[p-1].tipo and l[p].lvl == l[p-1].lvl and l[p].tipo == l[p+2].tipo and l[p].lvl == l[p+2].lvl:
+            if l[p-1].situacao[3] != "2" and l[p+2].situacao[3] != "2": fundir = "esquerda e direita"
+
+    elif l[p-1].tipo != None and b > 0:
+        if l[p].tipo == l[p-1].tipo and l[p].lvl == l[p-1].lvl:
+            if l[p-1].situacao[3] != "6": fundir = "esquerda"
+
+    elif l[p+2].tipo != None and b < 19:
+        if l[p].tipo == l[p+2].tipo and l[p].lvl == l[p+2].lvl:
+            if l[p+2].situacao[3] != "6": fundir = "direita"
+
+    if fundir != None: fusao(jogo,lista,pos_vetor,fundir)
+
+
+
+    # if l[p].pretendente == t and b == 0 and not l[p+1].vazio:
+    #     executar = False        #caso onde tem 1 celula sozinha na margem esquerda sendo amassada
+    # if l[p].pretendente == t and b == 20 and not l[p-1].vazio:
+    #     executar = False        #caso onde tem 1 celula sozinha na margem direita sendo amassada
+    #if l[p].pretendente == t and b > 0 and b < 18 and not l[p-1].vazio and l[p+1].pretendente == t and not l[p+2].vazio:
+        #uma construcao entre 2 salas, uma intersseccao, onde a clicada tem uma esquerda ocupada
+
+    #     if int(l[p-1].situacao[3]) < 6: fundir = "esquerda"
+    #     if jogo.construirtipo == l[p+2].tipo and 1 == int(l[p+2].lvl):
+    #         if int(l[p-1].situacao[3]) <= 2 and int(l[p+2].situacao[3]) <= 2: 
+    #             if fundir == "esquerda": fundir = "esquerda e direita"
+    #             else: fundir == "direita"
+    # elif l[p].pretendente == t and b > 1 and b < 19 and not l[p+1].vazio and l[p-1].pretendente == t and not l[p-2].vazio:
+    #             #aq pode ter erro, ctrlv. Melhor ficar assim, ai a celula q vc clica pode alterar a preferencia
+    #     if jogo.construirtipo == l[p+1].tipo and 1 == int(l[p+1].lvl):     
+    #         if int(l[p-2].situacao[3]) < 6: fundir = "direita"
+    #     if jogo.construirtipo == l[p-2].tipo and 1 == int(l[p-2].lvl):
+    #         if int(l[p+1].situacao[3]) <= 2 and int(l[p-2].situacao[3]) <= 2: 
+    #             if fundir == "direita": fundir = "esquerda e direita"
+    #             else: fundir == "esquerda"
+    #     pos_vetor = p - 1  #uma construcao entre 2 salas, uma intersseccao, onde a clicada tem uma direita ocupada
+    # elif l[p].pretendente == t and b > 0 and b < 20:        #aq quando vc clica numa pretendente, 2 casos
+    #     if l[p-1].pretendente != t and not l[p-1].pedra and not l[p+1].vazio:
+    #         if jogo.construirtipo == l[p+1].tipo and 1 == int(l[p+1].lvl):
+    #             if int(l[p+1].situacao[3]) < 6: fundir = "direita"
+    #         pos_vetor = p - 1           #vc clicou na celula que tem uma ocupada a direita
+    #     elif l[p+1].pretendente != t and not l[p+1].pedra and not l[p-1].vazio:
+    #         #vc clicou na celula que tem uma ocupada a esquerda
+    #         if jogo.construirtipo == l[p-1].tipo and 1 == int(l[p-1].lvl):
+    #             if int(l[p-1].situacao[3]) < 6: fundir = "esquerda"
+    #     else: executar = False
+    # #a ordem das 2 condicoes a seguir representa oq vai ser escolhido no caso de um diagrama de venn
+    # elif l[p].pretendente != t and not l[p].pedra:          #quando vc clica numa nao pretendente de salas normais
+    #     if l[p-1].pretendente == t and not l[p-2].vazio and b > 1:
+    #         if jogo.construirtipo == l[p-2].tipo and 1 == int(l[p-2].lvl):
+    #             if int(l[p-2].situacao[3]) < 6: fundir = "esquerda"
+    #         pos_vetor = p - 1           #se a esquerda dela tem uma sala pretendente, porque a esquerda dela e ocupado
+    #     elif l[p+1].pretendente == t and not l[p+2].vazio and b < 19:
+    #         if jogo.construirtipo == l[p+2].tipo and 1 == int(l[p+2].lvl):
+    #             if int(l[p+2].situacao[3]) < 6: fundir = "direita"
+    #         #se a direita dela tem uma pretendente porque sua direita esta ocupada
+    #     else: executar = False
+    # else: 
+    #     executar = False                
+    # print("eiiii", fundir)
