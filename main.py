@@ -74,7 +74,7 @@ virouodia =  pygame.mixer.Sound(path.join('sons','bomdia.wav'))
 
 while True:
 
-    if jogo.energia == 0 or bool(dwellers.lista):
+    if jogo.energia == 0 or not dwellers.lista:
         menu.gameover(jogo)
 #verificar como estao os dados, pra dar game over ou continuar. aqui tambem e consumida a vida e saude quando abaixo do minimo
 #game over deleta o save
@@ -103,8 +103,20 @@ while True:
                     celulas.lista[pos_vetor].morador = None
 
                 elif celulas.lista[pos_vetor].vazio != None and not celulas.lista[pos_vetor].vazio:
-                    if celulas.lista[pos_vetor].idle == True:
-                        pass #aqui acontece quando vai coletar a producao da celula
+                    if celulas.lista[pos_vetor].idle and celulas.lista[pos_vetor].morador != None:
+                        if celulas.lista[contagem].tipo == "cozinha":
+                            jogo.comida += jogo.sobresalas.producao[2] * celulas.lista[pos_vetor].morador.agilidade
+                            #aumentar xp
+                        elif celulas.lista[contagem].tipo == "gerador":
+                            jogo.energia += jogo.sobresalas.producao[4] * celulas.lista[pos_vetor].morador.força
+                        elif celulas.lista[contagem].tipo == "tratamento":
+                            jogo.agua += jogo.sobresalas.producao[3] * celulas.lista[pos_vetor].morador.resistencia
+                        elif celulas.lista[contagem].tipo == "renda":
+                            jogo.dinheiro += jogo.sobresalas.producao[5] * celulas.lista[pos_vetor].morador.inteligencia
+                        elif celulas.lista[contagem].tipo == "laboratorio":
+                            jogo.stimpack += jogo.sobresalas.producao[6] * celulas.lista[pos_vetor].morador.inteligencia
+                        #aqui acontece quando vai coletar a producao da celula
+                        celulas.lista[pos_vetor].idle = False
                     else: menu.espiar(jogo,celulas.lista,dwellers.lista,pos_vetor)
                         
                 elif celulas.lista[pos_vetor].pedra == True:

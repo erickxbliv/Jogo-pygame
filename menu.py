@@ -117,7 +117,12 @@ def menu(jogo):
                         jogo.dados = dados(None,load,None,None)
                         return
                 elif pos_vetor >= 92 and pos_vetor <= 96:
-                    pag_manual()
+                    pag_manual(jogo)
+                    jogo.janela.blit(fundo, (0,0))
+                    jogo.janela.blit(iniciar, (408,186))
+                    jogo.janela.blit(carregar, (408,279))
+                    jogo.janela.blit(manual, (408,372))
+                    jogo.janela.blit(sair, (408,465))
                 elif pos_vetor >= 113 and pos_vetor <= 117:
                     sys.exit()
             if event.type == pygame.KEYDOWN:
@@ -139,8 +144,17 @@ def menu(jogo):
 
 
 
-def pag_manual():
-    pass
+def pag_manual(jogo):
+
+    manual = pygame.image.load(path.join('menu', 'manualimprovisado.png'))
+    jogo.janela.blit(manual, (0,0))
+    pygame.display.flip()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                return
 
 
 
@@ -181,6 +195,7 @@ def sistema(jogo, lista, registro):
 
 
                         if pos_y >= 186 and pos_y < 279:
+                            contratar(jogo,lista,registro)
                             pass #abrir os moradores
                         if pos_y >= 279 and pos_y <= 372:
                             pass #abrir as configuracoes
@@ -414,4 +429,47 @@ def espiar(jogo,lista,registro,pos_vetor):
 
 
 def gameover(jogo):
-    pass
+
+    jogo.janela =pygame.display.set_mode((650,50))
+    jogo.janela.fill((0,0,0))
+    
+    frase = "GAME OVER! Seu score foi de " + str(jogo.scoredias) + " dias. Clique para continuar"
+    funcoes.texto(frase,(255,255,255),10,2)
+    pygame.display.flip()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP: sys.exit()
+
+
+
+
+def contratar(jogo,lista,registro):
+
+    return #ainda nao da certo aqui
+
+    funcoes.animacao(jogo,lista,False)
+    desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
+    vitrine = pygame.image.load(path.join('sistema', 'vitrine.png'))
+    jogo.janela.blit(desfocar, (0,0))
+    pygame.display.flip()
+
+    pagina = 0
+
+    while True:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                position = pos_x, pos_y = pygame.mouse.get_pos()
+                pos_vetor = funcoes.achar_celula(position)
+
+        if registro[pagina] <= jogo.moradores:
+            jogo.janela.blit(desfocar, (408,0))
+            frase = registro[pagina].nomecompleto + ": nivel " + str(registro[pagina].nivel)
+            funcoes.texto()
+
+
+        
+
+

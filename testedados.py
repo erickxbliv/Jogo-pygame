@@ -12,7 +12,7 @@ class dados:
         #pagina1 = ["elevador","quarto","cozinha","tratamento"]
         #pagina2 = ["gerador","renda","laboratorio","treinamento"]      #cancelei radio
     
-        self.producao = [0,0,0,0,10,0,0,0]
+        self.producao = [0,0,3,3,5,5,1,0]
         self.pagina0 = [100//4,80//4,200//4,200//4]
         self.pagina1 = [200//4,100//4,200//4,500//4]
 

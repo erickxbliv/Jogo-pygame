@@ -2,6 +2,10 @@ from random import seed
 from random import randint
 from funcoes import empregar_Dw_Cl
 
+from os import path
+from pygame import mixer
+mixer.init()
+
 class morador:   
     def __init__(self):
         self.id = None
@@ -173,6 +177,10 @@ def nasceu(jogo,registro,pai,mae):
     atribuir(novo_fila,total)
     registro.append(novo_fila)
     jogo.moradores += 1
+
+    nasceu =  mixer.Sound(path.join('sons','nascimento.wav'))
+    mixer.Sound.play(nasceu)
+
 
 
 

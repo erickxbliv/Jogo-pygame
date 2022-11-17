@@ -531,6 +531,8 @@ def sobrevivencia(jogo,lista,registro):
                 id = registro[contagem].celula.id
                 lista[id-1].morador = None
             registro.pop(contagem)
+            morreu =  mixer.Sound(path.join('sons','morte.wav'))
+            mixer.Sound.play(morreu)
 
             #musica
         else: contagem += 1
@@ -538,6 +540,7 @@ def sobrevivencia(jogo,lista,registro):
 
 
    #tirar a vida e aumentar a radiacao dos dwellers se tiver pouca comida ou agua, isso a cada hora?
+
 
 
 
