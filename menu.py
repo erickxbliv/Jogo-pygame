@@ -102,6 +102,7 @@ def menu(jogo):
             if event.type == pygame.MOUSEBUTTONUP:
                 position = pos_x, pos_y = pygame.mouse.get_pos()
                 pos_vetor = funcoes.achar_celula(position)
+                #print(pos_vetor)
 
                 if pos_vetor >= 50 and pos_vetor <= 54:
                     dificuldade = "facil"
@@ -116,8 +117,8 @@ def menu(jogo):
                         jogo.dados = dados(None,load,None,None)
                         return
                 elif pos_vetor >= 92 and pos_vetor <= 96:
-                    manual()
-                elif pos_vetor >= 113 and pos_vetor <= 114:
+                    pag_manual()
+                elif pos_vetor >= 113 and pos_vetor <= 117:
                     sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_d:
@@ -131,32 +132,16 @@ def menu(jogo):
         jogo.clock.tick(tempo)
 
 
-
-
-
-
-
-    
-    posicao = "1"
-    nome = "erick"
-    dificuldade = "facil"
-    carregar = False
-
-    if dificuldade == "facil": 
-        jogo.dinheiro = 5000     #quanto seria bom?
-        jogo.sobresalas.lucrodia = 20
-        jogo.lotacao = 12
-    else: 
-        jogo.dinheiro = 2500
-        jogo.sobresalas.lucrodia = 10
-        jogo.lotacao = 6
-
-    jogo.dados = dados(dificuldade,carregar,posicao,nome)
-    
     #return
 
 
 #fazer aqui todo e qualquer menu, qualquer icone verdinho que representar uma função era bom ficar aqui
+
+
+
+def pag_manual():
+    pass
+
 
 
 def sistema(jogo, lista, registro):
@@ -315,6 +300,25 @@ def espiar(jogo,lista,registro,pos_vetor):
     trabalhadores = None
     producao = None
 
+    podeevoluir = True
+    erro =  pygame.mixer.Sound(path.join('sons','erro.wav'))
+
+    produzir = True
+    if lista[pos_vetor].tipo == "cozinha":
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaoA.png'))
+    elif lista[pos_vetor].tipo == "gerador":
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaoF.png'))
+    elif lista[pos_vetor].tipo == "tratamento":
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaoR.png'))
+    elif lista[pos_vetor].tipo == "renda":
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaoI.png'))
+    elif lista[pos_vetor].tipo == "laboratorio":
+        prod = pygame.image.load(path.join('sistema', 'tipoproducaoI.png'))
+    else: produzir = False
+
+    
+
+    jogo.sobresalas.preco_evoluir()
     while True:
 
 
@@ -345,12 +349,31 @@ def espiar(jogo,lista,registro,pos_vetor):
 
         else: print("erro") #TESTE
 
-        if (pos_vetor + 1) > 84: coordenadas = (357,186)
-        else: coordenadas = (357,372)
+        if jogo.dinheiro < jogo.sobresalas.precoevoluir:
+            menu = pygame.image.load(path.join('sistema', 'insuficienteespiarnormal.png'))
+            podeevoluir = False
+        elif lista[pos_vetor].lvl == "3":
+            menu = pygame.image.load(path.join('sistema', 'maxespiarnormal.png'))
+            podeevoluir = False
+
+        if (pos_vetor + 1) > 84: 
+            coordenadas = (410,186)
+            y = 186
+        else: 
+            coordenadas = (410,372)
+            y = 372
+
+       
 
         jogo.janela.blit(contorno,lista[pos_vetor].coordenadas)
         jogo.janela.blit(menu,coordenadas)
         jogo.janela.blit(voltar,(0,0))
+        funcoes.texto(lista[pos_vetor].tipo,(255,255,255),521,y+30)
+
+        if produzir:
+            jogo.janela.blit(prod,(521,y+48))
+            funcoes.texto(lista[pos_vetor].lvl,(255,255,255),521+55,y+62)
+
 
         pygame.display.flip()
         
@@ -361,17 +384,34 @@ def espiar(jogo,lista,registro,pos_vetor):
 
                 position = pos_x, pos_y = pygame.mouse.get_pos()
                 pos_vetor2 = funcoes.achar_celula(position)
-
+                print(pos_vetor2)
                 if pos_vetor2 == 0:
                     jogo.modo = "espectador"
                     return
 
-                if pos_vetor2 >= pos_vetor and pos_vetor2 <= maximo:
+                elif pos_vetor2 >= pos_vetor and pos_vetor2 <= maximo:
                     jogo.modo = "espectador"
                     return
 
+                elif pos_vetor2 >= 50 and pos_vetor2 <= 54:
+                    if pos_vetor2 == 50:
+                        if podeevoluir: funcoes.evoluir(jogo,lista,pos_vetor)
+                        else: pygame.mixer.Sound.play(erro)
+                    if pos_vetor2 == 51:
+                        pass
+                    if pos_vetor2 == 54:
+                        pass
+
+                elif pos_vetor2 >= 92 and pos_vetor2 <= 96:
+                    #print("ola")
+                    if pos_vetor2 == 92:
+                        if podeevoluir: funcoes.evoluir(jogo,lista,pos_vetor)
+                        else: pygame.mixer.Sound.play(erro)
+                    if pos_vetor2 == 93:
+                        pass
+                    if pos_vetor2 == 96:
+                        pass
 
 
-
-        
-
+def gameover(jogo):
+    pass

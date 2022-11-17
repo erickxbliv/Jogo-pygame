@@ -5,19 +5,23 @@ pygame.init()
 
 from os import path
 import sys
-
+#import dwellers
+from random import seed
+from random import randint
 
 def animacao(jogo, lista, flipar):
 
     #jogo.sobresalas.testeduplas = []
 
     preto = 0, 0, 0
+    coleta = None
     jogo.janela.fill(preto)
     jogo.janela.blit(jogo.fuso,(0,0))
     jogo.janela.blit(jogo.fundo, (0,0))
     jogo.janela.blit(jogo.iconesistema, (0,0))
 
-    teste = pygame.image.load(path.join('personagens', 'teste.png'))
+    mano = pygame.image.load(path.join('personagens', 'mano.png'))
+    mina = pygame.image.load(path.join('personagens', 'mina.png'))
 
     if jogo.modo == "construir":
         contorno1 = pygame.image.load(path.join('sistema', 'constrorno1.png'))
@@ -32,9 +36,17 @@ def animacao(jogo, lista, flipar):
 
 
         if lista[contagem].morador != None:
-            jogo.janela.blit(teste, lista[contagem].coordenadas)
+            if lista[contagem].morador.sexo == "M": jogo.janela.blit(mano, lista[contagem].coordenadas)
+            else: jogo.janela.blit(mina, lista[contagem].coordenadas)
 
+        if lista[contagem].idle:
+            if lista[contagem].tipo == "cozinha": coleta = pygame.image.load(path.join('sistema', 'coletacozinha.png'))
+            elif lista[contagem].tipo == "gerador": coleta = pygame.image.load(path.join('sistema', 'coletagerador.png'))
+            elif lista[contagem].tipo == "tratamento": coleta = pygame.image.load(path.join('sistema', 'coletatratamento.png'))
+            elif lista[contagem].tipo == "renda": coleta = pygame.image.load(path.join('sistema', 'coletarenda.png'))
+            elif lista[contagem].tipo == "laboratorio": coleta = pygame.image.load(path.join('sistema', 'coletalaboratorio.png'))
 
+            if coleta != None: jogo.janela.blit(coleta,lista[contagem].coordenadas)
 
         if jogo.modo == "construir":
             if jogo.construirtipo == "elevador":
@@ -47,14 +59,8 @@ def animacao(jogo, lista, flipar):
                     if lista[contagem-1].vazio and not lista[contagem-1].pedra and b != 0:
                         jogo.janela.blit(contorno2,lista[contagem-1].coordenadas)
 
-                        #jogo.sobresalas.testduplas.append(ctg)      #TESTEEEEEEEEE
-                        #jogo.sobresalas.testduplas.append(ctg-1)
-
                     elif lista[contagem+1].vazio and not lista[contagem+1].pedra and b != 20:
                         jogo.janela.blit(contorno2,lista[contagem].coordenadas)
-
-                        #jogo.sobresalas.testduplas.append(ctg)      #TESTEEEEEEEEE
-                        #jogo.sobresalas.testduplas.append(ctg+1)
 
         contagem += 1
     HUD(jogo)
@@ -64,7 +70,7 @@ def animacao(jogo, lista, flipar):
 def minerar(jogo, celula):
 
     confirmacao = pygame.image.load(path.join('sistema', 'removerpedra.png'))
-    contorno = pygame.image.load(path.join('sistema', 'contorno1.png'))
+    contorno = pygame.image.load(path.join('sistema', 'contorno.png'))
     erro  = pygame.image.load(path.join('sistema', 'naopode.png'))
 
     jogo.janela.blit(contorno, celula.coordenadas)
@@ -450,6 +456,9 @@ def HUD(jogo):
 
 def evoluir(jogo,lista,pos_vetor):
 
+    valeu =  pygame.mixer.Sound(path.join('sons','obrigado.wav'))
+    
+
     jogo.sobresalas.preco_evoluir()
     if lista[pos_vetor].lvl == "3":
         pass #mostrar o erro e voltar.. talvez so transformar a seta em vermelha ou sla
@@ -461,7 +470,7 @@ def evoluir(jogo,lista,pos_vetor):
 
     lista[pos_vetor].obj = None
     lista[pos_vetor+1].obj = None
-    if int(lista[pos_vetor].situacao[3]) >= "4":
+    if int(lista[pos_vetor].situacao[3]) >= 4:
 
         lista[pos_vetor+2].lvl = str(int(lista[pos_vetor+2].lvl) + 1)
         lista[pos_vetor+3].lvl = str(int(lista[pos_vetor+3].lvl) + 1)
@@ -477,9 +486,58 @@ def evoluir(jogo,lista,pos_vetor):
             lista[pos_vetor+4].obj = None
             lista[pos_vetor+5].obj = None
 
-    
+    jogo.dinheiro = jogo.dinheiro - jogo.sobresalas.precoevoluir
+    pygame.mixer.Sound.play(valeu)
+
+
 
 
 def demolir():
     pass
+
+
+
+def sobrevivencia(jogo,lista,registro):
+
+
+    if jogo.agua >= (jogo.moradores * jogo.sobresalas.minimo): radmais = False
+    else: radmais = True
+
+    if jogo.comida >= (jogo.moradores * jogo.sobresalas.minimo): vidamais = True
+    else: vidamais = False
+
+    max = jogo.moradores - 1
+    contagem = 0
+    
+
+    while contagem <= max:
+        
+        barreira = 100 - registro[contagem].radiacao 
+        if vidamais: 
+            registro[contagem].vida += 1
+            if registro[contagem].vida > barreira: registro[contagem].vida = barreira
+        else: registro[contagem].vida -= 2
+
+        if radmais:
+            registro[contagem].radiacao += 2
+            barreira = 100 - registro[contagem].radiacao 
+            if registro[contagem].vida > barreira: registro[contagem].vida = barreira
+        else: 
+            registro[contagem].radiacao -= 2
+            if registro[contagem].radiacao < 0: registro[contagem].radiacao = 0
+
+        if registro[contagem].vida == 0:
+            if registro[contagem].celula != None:
+                id = registro[contagem].celula.id
+                lista[id-1].morador = None
+            registro.pop(contagem)
+
+            #musica
+        else: contagem += 1
+        
+
+
+   #tirar a vida e aumentar a radiacao dos dwellers se tiver pouca comida ou agua, isso a cada hora?
+
+
 
