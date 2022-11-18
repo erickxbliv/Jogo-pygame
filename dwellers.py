@@ -279,3 +279,4 @@ dono.resistencia = 3
 dono.agilidade = 5
 
 lista.append(dono)      #agora a lista de moradores no main tem 1 pessoa, atualizar isso la
+

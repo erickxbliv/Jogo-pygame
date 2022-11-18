@@ -511,7 +511,6 @@ def sobrevivencia(jogo,lista,registro):
     max = jogo.moradores - 1
     contagem = 0
     
-
     while contagem <= max:
         #print("OLA")
         if registro[contagem] != None:
@@ -547,7 +546,6 @@ def sobrevivencia(jogo,lista,registro):
         
         #print("SAI, ",contagem, max)
 
-
    #tirar a vida e aumentar a radiacao dos dwellers se tiver pouca comida ou agua, isso a cada hora?
 
 
@@ -563,11 +561,7 @@ def liberar_fusao(jogo,lista,pos_vetor):
     b = (pos_vetor) % 21        #o pos_vetor tem que ser a direita
     l = lista
     p = pos_vetor
-    t = "total"
-    executar = True
     fundir = None
-
-    
 
     if l[p-1].tipo != None and l[p+2].tipo != None and b > 0 and b < 20:
          if l[p].tipo == l[p-1].tipo and l[p].lvl == l[p-1].lvl and l[p].tipo == l[p+2].tipo and l[p].lvl == l[p+2].lvl:
@@ -584,49 +578,50 @@ def liberar_fusao(jogo,lista,pos_vetor):
     if fundir != None: fusao(jogo,lista,pos_vetor,fundir)
 
 
+def localtrabalho(jogo,lista,registro,dweller):
 
-    # if l[p].pretendente == t and b == 0 and not l[p+1].vazio:
-    #     executar = False        #caso onde tem 1 celula sozinha na margem esquerda sendo amassada
-    # if l[p].pretendente == t and b == 20 and not l[p-1].vazio:
-    #     executar = False        #caso onde tem 1 celula sozinha na margem direita sendo amassada
-    #if l[p].pretendente == t and b > 0 and b < 18 and not l[p-1].vazio and l[p+1].pretendente == t and not l[p+2].vazio:
-        #uma construcao entre 2 salas, uma intersseccao, onde a clicada tem uma esquerda ocupada
+    voltar = pygame.image.load(path.join('sistema', 'voltar.png'))
+    pode = ["porta","quarto","cozinha","tratamento","gerador","renda","laboratorio","treinamento"]
 
-    #     if int(l[p-1].situacao[3]) < 6: fundir = "esquerda"
-    #     if jogo.construirtipo == l[p+2].tipo and 1 == int(l[p+2].lvl):
-    #         if int(l[p-1].situacao[3]) <= 2 and int(l[p+2].situacao[3]) <= 2: 
-    #             if fundir == "esquerda": fundir = "esquerda e direita"
-    #             else: fundir == "direita"
-    # elif l[p].pretendente == t and b > 1 and b < 19 and not l[p+1].vazio and l[p-1].pretendente == t and not l[p-2].vazio:
-    #             #aq pode ter erro, ctrlv. Melhor ficar assim, ai a celula q vc clica pode alterar a preferencia
-    #     if jogo.construirtipo == l[p+1].tipo and 1 == int(l[p+1].lvl):     
-    #         if int(l[p-2].situacao[3]) < 6: fundir = "direita"
-    #     if jogo.construirtipo == l[p-2].tipo and 1 == int(l[p-2].lvl):
-    #         if int(l[p+1].situacao[3]) <= 2 and int(l[p-2].situacao[3]) <= 2: 
-    #             if fundir == "direita": fundir = "esquerda e direita"
-    #             else: fundir == "esquerda"
-    #     pos_vetor = p - 1  #uma construcao entre 2 salas, uma intersseccao, onde a clicada tem uma direita ocupada
-    # elif l[p].pretendente == t and b > 0 and b < 20:        #aq quando vc clica numa pretendente, 2 casos
-    #     if l[p-1].pretendente != t and not l[p-1].pedra and not l[p+1].vazio:
-    #         if jogo.construirtipo == l[p+1].tipo and 1 == int(l[p+1].lvl):
-    #             if int(l[p+1].situacao[3]) < 6: fundir = "direita"
-    #         pos_vetor = p - 1           #vc clicou na celula que tem uma ocupada a direita
-    #     elif l[p+1].pretendente != t and not l[p+1].pedra and not l[p-1].vazio:
-    #         #vc clicou na celula que tem uma ocupada a esquerda
-    #         if jogo.construirtipo == l[p-1].tipo and 1 == int(l[p-1].lvl):
-    #             if int(l[p-1].situacao[3]) < 6: fundir = "esquerda"
-    #     else: executar = False
-    # #a ordem das 2 condicoes a seguir representa oq vai ser escolhido no caso de um diagrama de venn
-    # elif l[p].pretendente != t and not l[p].pedra:          #quando vc clica numa nao pretendente de salas normais
-    #     if l[p-1].pretendente == t and not l[p-2].vazio and b > 1:
-    #         if jogo.construirtipo == l[p-2].tipo and 1 == int(l[p-2].lvl):
-    #             if int(l[p-2].situacao[3]) < 6: fundir = "esquerda"
-    #         pos_vetor = p - 1           #se a esquerda dela tem uma sala pretendente, porque a esquerda dela e ocupado
-    #     elif l[p+1].pretendente == t and not l[p+2].vazio and b < 19:
-    #         if jogo.construirtipo == l[p+2].tipo and 1 == int(l[p+2].lvl):
-    #             if int(l[p+2].situacao[3]) < 6: fundir = "direita"
-    #         #se a direita dela tem uma pretendente porque sua direita esta ocupada
-    #     else: executar = False
-    # else: 
-    #     executar = False                
-    # print("eiiii", fundir)
+    while True:
+
+        animacao(jogo,lista,False)
+        jogo.janela.blit(voltar, (0,0))
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT: sys.exit()
+                if event.type == pygame.MOUSEBUTTONUP:
+                    position = pos_x, pos_y = pygame.mouse.get_pos()
+                    pos_vetor = achar_celula(position)
+
+                    if pos_vetor == 0: return True
+
+                    if lista[pos_vetor].vazio != None:
+                        if not lista[pos_vetor].vazio:
+                            if lista[pos_vetor].tipo in pode:
+                                empregar_Dw_Cl(dweller,lista[pos_vetor])
+                                return False
+
+
+
+        
+def cifra(jogo,dweller,y):
+    cifra = pygame.image.load(path.join('sistema', 'cifra.png'))
+    jogo.janela.blit(cifra,(620+10,y))
+
+    teste = 33 #todos eles comecam pelo mesmo lugar no x
+
+    carisma = CLESTE, CSUL, CLARGURA, CALTURA = 633, (y+19+(40 - (dweller.carisma*4))), 6, dweller.carisma*4
+    inteligencia = ILESTE, ISUL, ILARGURA, IALTURA = 643, (y+19+(40 - (dweller.inteligencia*4))), 6, dweller.inteligencia*4
+    forca = FLESTE, FSUL, FLARGURA, FALTURA = 653, (y+19+(40 - (dweller.forca*4))), 6, dweller.forca*4
+    resistencia = RLESTE, RSUL, RLARGURA, RALTURA = 663, (y+19+(40 - (dweller.resistencia*4))), 6, dweller.resistencia*4
+    agilidade = ALESTE, ASUL, ALARGURA, AALTURA = 673, (y+19+(40 - (dweller.agilidade*4))), 6, dweller.agilidade*4
+
+    verde = 0, 255, 0
+  
+    pygame.draw.rect(jogo.janela,verde,carisma)
+    pygame.draw.rect(jogo.janela,verde,inteligencia)
+    pygame.draw.rect(jogo.janela,verde,forca)
+    pygame.draw.rect(jogo.janela,verde,resistencia)
+    pygame.draw.rect(jogo.janela,verde,agilidade)

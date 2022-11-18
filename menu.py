@@ -195,8 +195,14 @@ def sistema(jogo, lista, registro):
 
 
                         if pos_y >= 186 and pos_y < 279:
-                            contratar(jogo,lista,registro)
-                            pass #abrir os moradores
+                            voltou = contratar(jogo,lista,registro,None)
+                            if voltou == False: return
+                            else: 
+                                funcoes.animacao(jogo,lista,False)
+                                jogo.janela.blit(desfocar, (0,0))
+                                jogo.janela.blit(subsistemas, (0,0))
+                                pygame.display.flip()
+                             #abrir os moradores
                         if pos_y >= 279 and pos_y <= 372:
                             pass #abrir as configuracoes
                     else: return
@@ -413,7 +419,7 @@ def espiar(jogo,lista,registro,pos_vetor):
                         if podeevoluir: funcoes.evoluir(jogo,lista,pos_vetor)
                         else: pygame.mixer.Sound.play(erro)
                     if pos_vetor2 == 51:
-                        pass
+                        pass #AQUI, TEM QUE PEGAR A PRIMEIRA NA SALA A NAO TER NINGUEM E ENVIA PRA FUNCAO CONTRATAR
                     if pos_vetor2 == 54:
                         pass
 
@@ -430,11 +436,11 @@ def espiar(jogo,lista,registro,pos_vetor):
 
 def gameover(jogo):
 
-    jogo.janela =pygame.display.set_mode((650,50))
-    jogo.janela.fill((0,0,0))
+    fundo = pygame.image.load(path.join('menu', 'gameover.png'))
+    jogo.janela.blit(fundo,(0,0))
     
     frase = "GAME OVER! Seu score foi de " + str(jogo.scoredias) + " dias. Clique para continuar"
-    funcoes.texto(frase,(255,255,255),10,2)
+    funcoes.texto(frase,(255,255,255),10,400)
     pygame.display.flip()
     while True:
         for event in pygame.event.get():
@@ -444,31 +450,168 @@ def gameover(jogo):
 
 
 
-def contratar(jogo,lista,registro):
-
-    return #ainda nao da certo aqui
+def contratar(jogo,lista,registro,celula):
 
     funcoes.animacao(jogo,lista,False)
     desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
-    vitrine = pygame.image.load(path.join('sistema', 'vitrine.png'))
-    jogo.janela.blit(desfocar, (0,0))
-    pygame.display.flip()
+    voltar = pygame.image.load(path.join('sistema', 'voltar.png'))
+    vitrine = pygame.image.load(path.join('sistema', 'vitrineteste.png'))
 
+    mano = pygame.image.load(path.join('personagens', 'mano.png'))
+    mina = pygame.image.load(path.join('personagens', 'mina.png'))
+    morto = pygame.image.load(path.join('personagens', 'falecido.png'))
+    remedio = pygame.image.load(path.join('sistema', 'coletarlaboratorio.png'))
+
+    contagem = 1
+    pos = contagem
     pagina = 0
 
+    tamanho = len(registro)
+    max = ((tamanho-1) // 7)        #verificar se isso ta certo
+    min = 0
+
+    escolhida = False
+    if celula != None: escolhida = True     #se ja enviar a sala, nao precisa chamar a funcao de escolher o local de trabalho
+
+    entrevistado = None
+
     while True:
+
+        entrevistado = None
+        if pagina == min: ant = "naopaginaanterior"
+        else: ant = "paginaanterior"
+        if pagina == max: prox = "naopaginaproxima"
+        else: prox = "paginaproxima"
+
+        antpag = pygame.image.load(path.join('sistema', ant + '.png'))
+        proxpag = pygame.image.load(path.join('sistema', prox + '.png'))
+
+        funcoes.animacao(jogo,lista,False)
+        jogo.janela.blit(desfocar, (0,0))
+        jogo.janela.blit(voltar, (0,0))
+        jogo.janela.blit(antpag, (0,279))
+        jogo.janela.blit(proxpag, (969,279))
+
+        pos = contagem - 1
+        teste = 0
+        while pos < (contagem+6):
+            if pos <= (tamanho - 1):
+
+                jogo.janela.blit(vitrine, (102,(teste*93)))
+                if registro[pos] == None: jogo.janela.blit(morto, (110,(teste*93)))
+                else:
+                    if registro[pos].sexo == "M": jogo.janela.blit(mano, (105,(teste*93)))
+                    else: jogo.janela.blit(mina, (105,(teste*93)))
+
+                    funcoes.texto(registro[pos].nomecompleto,(255,255,255),170,((teste*93)+35))
+                    funcoes.texto("vida: "+str(registro[pos].vida),(0,255,0),360,((teste*93)+35))
+                    funcoes.texto("rad: "+str(registro[pos].radiacao),(255,0,0),460,((teste*93)+35))
+                    funcoes.texto("lvl: "+str(registro[pos].nivel),(255,255,255),530,((teste*93)+35))
+
+                    funcoes.cifra(jogo,registro[pos],(teste*93))
+                    if registro[pos].celula != None:
+                        funcoes.texto("trabalho: "+registro[pos].celula.tipo,(255,255,255),690,((teste*93)+35))
+                    else: funcoes.texto("dormindo",(255,255,255),690,((teste*93)+35))
+
+                    jogo.janela.blit(remedio, (918,(teste*93)))
+
+                teste += 1
+                pos += 1
+            else: break
+
+
+        pygame.display.flip()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
             if event.type == pygame.MOUSEBUTTONUP:
                 position = pos_x, pos_y = pygame.mouse.get_pos()
                 pos_vetor = funcoes.achar_celula(position)
+                #print(pos_vetor)
+                if pos_vetor == 0: return True
 
-        if registro[pagina] <= jogo.moradores:
-            jogo.janela.blit(desfocar, (408,0))
-            frase = registro[pagina].nomecompleto + ": nivel " + str(registro[pagina].nivel)
-            funcoes.texto()
+                elif pos_vetor == 63 or pos_vetor == 64 or pos_vetor == 84 or pos_vetor == 85:
+                    if pagina > min: 
+                        pagina -= 1
+                        contagem -= 7
+                elif pos_vetor == 82 or pos_vetor == 83 or pos_vetor == 103 or pos_vetor == 104:
+                    if pagina < max: 
+                        pagina += 1
+                        contagem += 7 
+
+                elif pos_x >= 102 and pos_x <= 969:
+
+                    if pos_y >= 558 and pos_y <= 651:
+                        if pos_x >= 918:
+                            pass #aqui da remedio
+                        else: entrevistado = contagem + 6     #num else? sera..
+                    elif pos_y >= 465:
+                        if pos_x >= 918:
+                            pass #aqui da remedio
+                        else: entrevistado = contagem + 5
+                        #print(entrevistado)
+                    elif pos_y >= 372:
+                        if pos_x >= 918:
+                            pass #aqui da remedio
+                        else: entrevistado = contagem + 4
+                    elif pos_y >= 279:
+                        if pos_x >= 918:
+                            pass #aqui da remedio
+                        else: entrevistado = contagem + 3
+                    elif pos_y >= 186:
+                        if pos_x >= 918:
+                            pass #aqui da remedio
+                        else: entrevistado = contagem + 2
+                    elif pos_y >= 93:
+                        if pos_x >= 918:
+                            pass #aqui da remedio
+                        else: entrevistado = contagem + 1
+                    elif pos_y >= 0:
+                        if pos_x >= 918:
+                            pass #aqui da remedio
+                        else: entrevistado = contagem
+                   
+        
+        if entrevistado != None:
+            print(tamanho,(entrevistado-1))
+            dweller = registro[entrevistado-1]
+            if escolhida:
+                funcoes.empregar_Dw_Cl(dweller,celula)
+                return False
+            else:
+                voltou = funcoes.localtrabalho(jogo,lista,registro,dweller)
+                if voltou == False: return False
+
+
+
+
+
+
+    # return #ainda nao da certo aqui
+
+    # funcoes.animacao(jogo,lista,False)
+    # desfocar = pygame.image.load(path.join('sistema', 'sistemaaberto.png'))
+    # vitrine = pygame.image.load(path.join('sistema', 'vitrine.png'))
+    # jogo.janela.blit(desfocar, (0,0))
+    # pygame.display.flip()
+
+    # pagina = 0
+
+    # while True:
+
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT: sys.exit()
+    #         if event.type == pygame.MOUSEBUTTONUP:
+    #             position = pos_x, pos_y = pygame.mouse.get_pos()
+    #             pos_vetor = funcoes.achar_celula(position)
+
+    #     if registro[pagina] <= jogo.moradores:
+    #         jogo.janela.blit(desfocar, (408,0))
+    #         frase = registro[pagina].nomecompleto + ": nivel " + str(registro[pagina].nivel)
+    #         funcoes.texto()
 
 
         
 
+def empregar():
+    pass

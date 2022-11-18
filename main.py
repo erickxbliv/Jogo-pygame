@@ -106,16 +106,16 @@ while True:
 
                 elif celulas.lista[pos_vetor].vazio != None and not celulas.lista[pos_vetor].vazio:
                     if celulas.lista[pos_vetor].idle and celulas.lista[pos_vetor].morador != None:
-                        if celulas.lista[contagem].tipo == "cozinha":
+                        if celulas.lista[pos_vetor].tipo == "cozinha":
                             jogo.comida += jogo.sobresalas.producao[2] * celulas.lista[pos_vetor].morador.agilidade
                             #aumentar xp
-                        elif celulas.lista[contagem].tipo == "gerador":
-                            jogo.energia += jogo.sobresalas.producao[4] * celulas.lista[pos_vetor].morador.força
-                        elif celulas.lista[contagem].tipo == "tratamento":
+                        elif celulas.lista[pos_vetor].tipo == "gerador":
+                            jogo.energia += jogo.sobresalas.producao[4] * celulas.lista[pos_vetor].morador.forca
+                        elif celulas.lista[pos_vetor].tipo == "tratamento":
                             jogo.agua += jogo.sobresalas.producao[3] * celulas.lista[pos_vetor].morador.resistencia
-                        elif celulas.lista[contagem].tipo == "renda":
+                        elif celulas.lista[pos_vetor].tipo == "renda":
                             jogo.dinheiro += jogo.sobresalas.producao[5] * celulas.lista[pos_vetor].morador.inteligencia
-                        elif celulas.lista[contagem].tipo == "laboratorio":
+                        elif celulas.lista[pos_vetor].tipo == "laboratorio":
                             jogo.stimpack += jogo.sobresalas.producao[6] * celulas.lista[pos_vetor].morador.inteligencia
                         #aqui acontece quando vai coletar a producao da celula
                         celulas.lista[pos_vetor].idle = False
@@ -142,14 +142,15 @@ while True:
                 if celulas.lista[contagem].situacao[1] == "1": dwellers.verificar_gravidez(jogo,celulas.lista,dwellers.lista,contagem)
 
             elif celulas.lista[contagem].tipo in prod and celulas.lista[contagem].morador != None:
-
+                print(horario)
                 if celulas.lista[contagem].lvl == "1":
-                    if horario == 24.0 or horario == 12.0: celulas.lista[contagem].idle = True
+                    if int(horario) == 24 or int(horario) == 12: celulas.lista[contagem].idle = True
                 elif celulas.lista[contagem].lvl == "2":
-                    if horario == 24.0 or horario == 8.0 or horario == 16.0: celulas.lista[contagem].idle = True
+                    if int(horario) == 24 or int(horario) == 8 or int(horario) == 16: celulas.lista[contagem].idle = True
                 elif celulas.lista[contagem].lvl == "3":
-                    if horario == 24.0 or horario == 12.0 or horario == 6.0 or horario == 18.0: celulas.lista[contagem].idle = True
-
+                    if int(horario) == 24 or int(horario) == 12 or int(horario) == 6 or int(horario) == 18: 
+                        celulas.lista[contagem].idle = True
+                else: print("erro")
             contagem += 1
         
         if jogo.agua < ((jogo.sobresalas.gastoagua * jogo.moradores) // 24): jogo.agua = 0
