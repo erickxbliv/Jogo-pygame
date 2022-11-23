@@ -460,7 +460,7 @@ def contratar(jogo,lista,registro,celula):
     mano = pygame.image.load(path.join('personagens', 'mano.png'))
     mina = pygame.image.load(path.join('personagens', 'mina.png'))
     morto = pygame.image.load(path.join('personagens', 'falecido.png'))
-    remedio = pygame.image.load(path.join('sistema', 'coletarlaboratorio.png'))
+    remedio = pygame.image.load(path.join('sistema', 'coletalaboratorio.png'))
 
     contagem = 1
     pos = contagem
@@ -544,31 +544,45 @@ def contratar(jogo,lista,registro,celula):
                     if pos_y >= 558 and pos_y <= 651:
                         if pos_x >= 918:
                             pass #aqui da remedio
+                        elif contagem + 6 > tamanho: pass
+                        elif registro[contagem+5] == None: pass
                         else: entrevistado = contagem + 6     #num else? sera..
                     elif pos_y >= 465:
                         if pos_x >= 918:
                             pass #aqui da remedio
+                        elif contagem + 5 > tamanho: pass
+                        elif registro[contagem+4] == None: pass
                         else: entrevistado = contagem + 5
                         #print(entrevistado)
                     elif pos_y >= 372:
                         if pos_x >= 918:
                             pass #aqui da remedio
+                        elif contagem + 4 > tamanho: pass
+                        elif registro[contagem+3] == None: pass
                         else: entrevistado = contagem + 4
                     elif pos_y >= 279:
                         if pos_x >= 918:
                             pass #aqui da remedio
+                        elif contagem + 3 > tamanho: pass
+                        elif registro[contagem+2] == None: pass
                         else: entrevistado = contagem + 3
                     elif pos_y >= 186:
                         if pos_x >= 918:
                             pass #aqui da remedio
+                        elif contagem + 2 > tamanho: pass
+                        elif registro[contagem+1] == None: pass
                         else: entrevistado = contagem + 2
                     elif pos_y >= 93:
                         if pos_x >= 918:
                             pass #aqui da remedio
+                        elif contagem + 1 > tamanho: pass
+                        elif registro[contagem] == None: pass
                         else: entrevistado = contagem + 1
                     elif pos_y >= 0:
                         if pos_x >= 918:
                             pass #aqui da remedio
+                        elif contagem > tamanho: pass
+                        elif registro[contagem-1] == None: pass
                         else: entrevistado = contagem
                    
         

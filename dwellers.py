@@ -161,7 +161,7 @@ def nasceu(jogo,registro,pai,mae):
 
     seed()
     novo_fila = morador()
-    novo_fila.id = registro[jogo.moradores-1] + 1
+    novo_fila.id = registro[jogo.moradores-1].id + 1
     teste = randint(1,2)
     if teste == 1: novo_fila.sexo = "F"
     else: novo_fila.sexo = "M"
@@ -199,33 +199,33 @@ def verificar_gravidez(jogo,lista,registro,pos_vetor):
     if lista[pos_vetor+1].morador != None:          #se na segunda tbm tem
         if lista[pos_vetor+1].morador.sexo == "M":   #e for homem
             if melhor_cara != None:             #se o melhor ja foi encontrado
-                if melhor_cara.carisma < lista[pos_vetor+1].morador.carisma: melhor_cara = lista[pos_vetor+1].morador.carisma#foi superado?
+                if melhor_cara.carisma < lista[pos_vetor+1].morador.carisma: melhor_cara = lista[pos_vetor+1].morador#foi superado?
             else: melhor_cara = lista[pos_vetor+1].morador  #se n foi encontrado, melhor q nada
         elif lista[pos_vetor+1].morador.sexo == "F":  #ou for mulher
             if melhor_muie != None:
-                if melhor_muie.carisma < lista[pos_vetor+1].morador.carisma: melhor_muie = lista[pos_vetor+1].morador.carisma
+                if melhor_muie.carisma < lista[pos_vetor+1].morador.carisma: melhor_muie = lista[pos_vetor+1].morador
             else: melhor_muie = lista[pos_vetor+1].morador
 
     if int(lista[pos_vetor].situacao[3]) >= 4:
         if lista[pos_vetor+2].morador != None:          #se na segunda tbm tem
             if lista[pos_vetor+2].morador.sexo == "M":   #e for homem
                 if melhor_cara != None:             #se o melhor ja foi encontrado
-                    if melhor_cara.carisma < lista[pos_vetor+2].morador.carisma: melhor_cara = lista[pos_vetor+2].morador.carisma
+                    if melhor_cara.carisma < lista[pos_vetor+2].morador.carisma: melhor_cara = lista[pos_vetor+2].morador
                 else: melhor_cara = lista[pos_vetor+2].morador  #se n foi encontrado, melhor q nada
             elif lista[pos_vetor+2].morador.sexo == "F":  #ou for mulher
                 if melhor_muie != None:
-                    if melhor_muie.carisma < lista[pos_vetor+2].morador.carisma: melhor_muie = lista[pos_vetor+2].morador.carisma
+                    if melhor_muie.carisma < lista[pos_vetor+2].morador.carisma: melhor_muie = lista[pos_vetor+2].morador
                 else: melhor_muie = lista[pos_vetor+2].morador
 
 
         if lista[pos_vetor+3].morador != None:          #se na segunda tbm tem
             if lista[pos_vetor+3].morador.sexo == "M":   #e for homem
                 if melhor_cara != None:             #se o melhor ja foi encontrado
-                    if melhor_cara.carisma < lista[pos_vetor+3].morador.carisma: melhor_cara = lista[pos_vetor+3].morador.carisma
+                    if melhor_cara.carisma < lista[pos_vetor+3].morador.carisma: melhor_cara = lista[pos_vetor+3].morador
                 else: melhor_cara = lista[pos_vetor+3].morador  #se n foi encontrado, melhor q nada
             elif lista[pos_vetor+3].morador.sexo == "F":  #ou for mulher
                 if melhor_muie != None:
-                    if melhor_muie.carisma < lista[pos_vetor+3].morador.carisma: melhor_muie = lista[pos_vetor+3].morador.carisma
+                    if melhor_muie.carisma < lista[pos_vetor+3].morador.carisma: melhor_muie = lista[pos_vetor+3].morador
                 else: melhor_muie = lista[pos_vetor+3].morador
 
         if int(lista[pos_vetor].situacao[3]) >= 6:
@@ -254,7 +254,9 @@ def verificar_gravidez(jogo,lista,registro,pos_vetor):
     if melhor_cara != None and melhor_muie != None:
         seed()
         max = (melhor_cara.carisma + melhor_muie.carisma) // 2
+        max = max * int(lista[pos_vetor].lvl)
         valor = randint(1,50)
+        print(valor,"<=",max,"?")
         if valor >= 1 and valor <= max: nasceu(jogo,registro,melhor_cara,melhor_muie)
 
 

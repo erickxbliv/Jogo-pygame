@@ -357,6 +357,7 @@ def texto(frase, cor, x, y):
 
 def fusao(jogo, lista, pos_vetor, fundir):
 
+    print("teste")
     if fundir == "esquerda":
         if lista[pos_vetor-2].situacao[3] == "4":
             lista[pos_vetor-4].situacao = "_1-6"            
@@ -476,19 +477,25 @@ def evoluir(jogo,lista,pos_vetor):
 
         lista[pos_vetor+2].obj = None
         lista[pos_vetor+3].obj = None
-
+        print("ola")
         if lista[pos_vetor].situacao[3] == "6":
-
+            print("ei")
             lista[pos_vetor+4].lvl = str(int(lista[pos_vetor+4].lvl) + 1)
             lista[pos_vetor+5].lvl = str(int(lista[pos_vetor+5].lvl) + 1)
 
             lista[pos_vetor+4].obj = None
             lista[pos_vetor+5].obj = None
 
+            pos_max = pos_vetor + 5
+
+        else: pos_max = pos_vetor + 3
+    
+    else: pos_max = pos_vetor + 1
+
     jogo.dinheiro = jogo.dinheiro - jogo.sobresalas.precoevoluir
     pygame.mixer.Sound.play(valeu)
 
-    liberar_fusao(jogo,lista,pos_vetor)
+    liberar_fusao(jogo,lista,pos_vetor,pos_max)
     
 
 
@@ -512,8 +519,14 @@ def sobrevivencia(jogo,lista,registro):
     contagem = 0
     
     while contagem <= max:
+
         #print("OLA")
         if registro[contagem] != None:
+
+            if registro[contagem].xp >= 50:
+                registro[contagem].xp -= 50
+                registro[contagem].nivel += 1
+
             barreira = 100 - registro[contagem].radiacao 
             if vidamais: 
                 registro[contagem].vida += 1
@@ -556,25 +569,27 @@ def sobrevivencia(jogo,lista,registro):
 
 
 
-def liberar_fusao(jogo,lista,pos_vetor):
+def liberar_fusao(jogo,lista,pos_vetor,pm):
+
+    #print("hm")
 
     b = (pos_vetor) % 21        #o pos_vetor tem que ser a direita
     l = lista
     p = pos_vetor
     fundir = None
 
-    if l[p-1].tipo != None and l[p+2].tipo != None and b > 0 and b < 20:
-         if l[p].tipo == l[p-1].tipo and l[p].lvl == l[p-1].lvl and l[p].tipo == l[p+2].tipo and l[p].lvl == l[p+2].lvl:
-            if l[p-1].situacao[3] != "2" and l[p+2].situacao[3] != "2": fundir = "esquerda e direita"
-
+    if l[p-1].tipo != None and l[pm+1].tipo != None and b > 0 and b < 20:
+         if l[p].tipo == l[p-1].tipo and l[p].lvl == l[p-1].lvl and l[p].tipo == l[pm+1].tipo and l[p].lvl == l[pm+1].lvl:
+            if l[p-1].situacao[3] != "2" and l[pm+1].situacao[3] != "2": fundir = "esquerda e direita"
+            #print("1")
     elif l[p-1].tipo != None and b > 0:
         if l[p].tipo == l[p-1].tipo and l[p].lvl == l[p-1].lvl:
             if l[p-1].situacao[3] != "6": fundir = "esquerda"
-
-    elif l[p+2].tipo != None and b < 19:
-        if l[p].tipo == l[p+2].tipo and l[p].lvl == l[p+2].lvl:
-            if l[p+2].situacao[3] != "6": fundir = "direita"
-
+            #print("2")
+    elif l[pm+1].tipo != None and b < 19:
+        if l[p].tipo == l[pm+1].tipo and l[p].lvl == l[pm+1].lvl:
+            if l[pm+1].situacao[3] != "6": fundir = "direita"
+            #print(l[p].tipo, l[p+2].tipo)
     if fundir != None: fusao(jogo,lista,pos_vetor,fundir)
 
 

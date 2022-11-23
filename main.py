@@ -32,7 +32,7 @@ class geral:
         self.sobresalas = None
 
         self.dinheiro = 0
-        self.energia = 1000         #se chegar a zero acaba
+        self.energia = 1000        #se chegar a zero acaba
         self.comida = 1000
         self.agua = 1000
         self.stimpack = 0
@@ -76,7 +76,7 @@ while True:
 
     #if jogo.energia == 0 or not dwellers.lista:
     #print(jogo.moradores)
-    if not dwellers.lista or jogo.moradores == 0:
+    if not dwellers.lista or jogo.moradores == 0 or jogo.energia <= 0:
         menu.gameover(jogo)
 #verificar como estao os dados, pra dar game over ou continuar. aqui tambem e consumida a vida e saude quando abaixo do minimo
 #game over deleta o save
@@ -108,13 +108,21 @@ while True:
                     if celulas.lista[pos_vetor].idle and celulas.lista[pos_vetor].morador != None:
                         if celulas.lista[pos_vetor].tipo == "cozinha":
                             jogo.comida += jogo.sobresalas.producao[2] * celulas.lista[pos_vetor].morador.agilidade
+                            if jogo.comida > 1000: jogo.comida = 1000
+                            celulas.lista[pos_vetor].morador.xp += 10
                             #aumentar xp
                         elif celulas.lista[pos_vetor].tipo == "gerador":
                             jogo.energia += jogo.sobresalas.producao[4] * celulas.lista[pos_vetor].morador.forca
+                            if jogo.energia > 1000: jogo.energia = 1000
+                            celulas.lista[pos_vetor].morador.xp += 10
                         elif celulas.lista[pos_vetor].tipo == "tratamento":
                             jogo.agua += jogo.sobresalas.producao[3] * celulas.lista[pos_vetor].morador.resistencia
+                            if jogo.agua > 1000: jogo.agua = 1000
+                            celulas.lista[pos_vetor].morador.xp += 10
                         elif celulas.lista[pos_vetor].tipo == "renda":
                             jogo.dinheiro += jogo.sobresalas.producao[5] * celulas.lista[pos_vetor].morador.inteligencia
+                            celulas.lista[pos_vetor].morador.xp += 15
+                            celulas.lista[pos_vetor].morador.radiacao += 2
                         elif celulas.lista[pos_vetor].tipo == "laboratorio":
                             jogo.stimpack += jogo.sobresalas.producao[6] * celulas.lista[pos_vetor].morador.inteligencia
                         #aqui acontece quando vai coletar a producao da celula
@@ -134,15 +142,16 @@ while True:
     if int(ponteiro) != int(horario):                  
         jogo.ciclonoitedia(int(horario))
         ponteiro = horario
+        print(horario)
         
         contagem = 0
         while contagem < 147:
 
-            if celulas.lista[contagem].tipo == "quarto" and horario == 24.0:
+            if celulas.lista[contagem].tipo == "quarto" and int(horario) == 24:
                 if celulas.lista[contagem].situacao[1] == "1": dwellers.verificar_gravidez(jogo,celulas.lista,dwellers.lista,contagem)
 
             elif celulas.lista[contagem].tipo in prod and celulas.lista[contagem].morador != None:
-                print(horario)
+                
                 if celulas.lista[contagem].lvl == "1":
                     if int(horario) == 24 or int(horario) == 12: celulas.lista[contagem].idle = True
                 elif celulas.lista[contagem].lvl == "2":
@@ -164,13 +173,14 @@ while True:
         funcoes.sobrevivencia(jogo,celulas.lista,dwellers.lista)
         #print("consegui.. agora:")
 
-    horario += 0.01
-    if horario > 24.0:    #24 = max de imagens
+    horario += 0.03
+    #print(horario)
+    if horario > 24.3:    #24 = max de imagens
         horario = 1.0
         jogo.dinheiro += jogo.sobresalas.lucrodia
         pygame.mixer.Sound.play(virouodia)
         jogo.scoredias += 1
-
+        print("virou")
 
         #aqui tambem acontecem os consumos, na vdd nao melhor q seja ao passar das horas mesmo
     jogo.clock.tick(60)
