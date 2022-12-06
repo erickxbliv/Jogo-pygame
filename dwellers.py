@@ -185,7 +185,7 @@ def nasceu(jogo,registro,pai,mae):
 
 
 
-def verificar_gravidez(jogo,lista,registro,pos_vetor):
+def verificar_gravidez(jogo,lista,registro,pos_vetor):      #MELHORAR AQUI
 
     melhor_cara = None
     melhor_muie = None

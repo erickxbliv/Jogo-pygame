@@ -33,7 +33,7 @@ def menu(jogo):
 
 
     
-    
+    #organizar aq
 
     #opcoes: iniciar novo jogo, carregar jogo, manual, opcoes ou sair
     #se escolher iniciar jogo, pergunta posicao, nome do save e dificuldade
