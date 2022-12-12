@@ -1,5 +1,6 @@
 import pygame
 from pygame import mixer
+import pytest
 
 pygame.init()
 mixer.init()
@@ -13,6 +14,7 @@ import blueprint
 
 import testedados
 import dwellers
+from caixas import verificar_pytest
 
 class geral:
     def __init__(self):
@@ -37,6 +39,7 @@ class geral:
         self.agua = 1000
         self.stimpack = 0
         self.radaway = 0
+        self.passagem = 0.03
 
         self.moradores = None       #se chegar a zero, game over
         self.lotacao = None
@@ -72,6 +75,7 @@ virouodia =  pygame.mixer.Sound(path.join('sons','bomdia.wav'))
     
 #modos: espectador - visualizar o bunker, construir - visualizar onde construir, espiar - assistir uma sala individualmente
 
+verificar_pytest(jogo,celulas.lista,dwellers.lista)
 while True:
 
     #if jogo.energia == 0 or not dwellers.lista:
@@ -147,7 +151,7 @@ while True:
         contagem = 0
         while contagem < 147:
 
-            if celulas.lista[contagem].tipo == "quarto" and int(horario) == 24:
+            if celulas.lista[contagem].tipo == "quarto" and int(horario) == 23:
                 if celulas.lista[contagem].situacao[1] == "1": dwellers.verificar_gravidez(jogo,celulas.lista,dwellers.lista,contagem)
 
             elif celulas.lista[contagem].tipo in prod and celulas.lista[contagem].morador != None:
@@ -173,7 +177,7 @@ while True:
         funcoes.sobrevivencia(jogo,celulas.lista,dwellers.lista)
         #print("consegui.. agora:")
 
-    horario += 0.03
+    horario += jogo.passagem
     #print(horario)
     if horario > 24.3:    #24 = max de imagens
         horario = 1.0

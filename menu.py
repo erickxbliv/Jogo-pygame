@@ -227,10 +227,10 @@ def selecionarsala(jogo,lista):
     min = 0
     max = 1
 
-    coord0 = [66,67,68,69,87,88,89,90]      #as celulas onde estao cada opcao
-    coord1 = [70,71,72,73,91,92,93,94]
-    coord2 = [74,75,76,77,95,96,97,98]
-    coord3 = [78,79,80,81,99,100,101,102]
+    coord = [[66,67,68,69,87,88,89,90],      #as celulas onde estao cada opcao
+            [70,71,72,73,91,92,93,94],
+            [74,75,76,77,95,96,97,98],
+            [78,79,80,81,99,100,101,102]]
 
     while True:
         if paginaatual == min:
@@ -277,29 +277,11 @@ def selecionarsala(jogo,lista):
                 elif pos_vetor == 82 or pos_vetor == 83 or pos_vetor == 103 or pos_vetor == 104:
                     if paginaatual < max: paginaatual += 1
 
-                elif pos_vetor in coord0:
-                    if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][0]: 
-                        jogo.construirtipo = livreto[paginaatual][0]
-                        jogo.sobresalas.precoatual = jogo.sobresalas.preco[paginaatual][0]
-                    else: jogo.construirtipo = None
-
-                elif pos_vetor in coord1:
-                    if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][1]: 
-                        jogo.construirtipo = livreto[paginaatual][1]
-                        jogo.sobresalas.precoatual = jogo.sobresalas.preco[paginaatual][1]
-                    else: jogo.construirtipo = None
-
-                elif pos_vetor in coord2:
-                    if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][2]: 
-                        jogo.construirtipo = livreto[paginaatual][2]
-                        jogo.sobresalas.precoatual = jogo.sobresalas.preco[paginaatual][2]
-                    else: jogo.construirtipo = None
-
-                elif pos_vetor in coord3:
-                    if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][3]: 
-                        jogo.construirtipo = livreto[paginaatual][3]
-                        jogo.sobresalas.precoatual = jogo.sobresalas.preco[paginaatual][3]
-                    else: jogo.construirtipo = None
+                elif pos_vetor in (coord[0] or coord[1] or coord[2] or coord[3]):
+                    i = 0
+                    while i <= 3:
+                        if pos_vetor in coord[i]: mostrar_pag(jogo,livreto,paginaatual,i)
+                        i += 1
                 else: return True
 
                 if jogo.construirtipo != None:
@@ -311,6 +293,11 @@ def selecionarsala(jogo,lista):
         jogo.clock.tick(60)
 
 
+def mostrar_pag(jogo,livreto,paginaatual,mostrar):
+    if jogo.dinheiro >= jogo.sobresalas.preco[paginaatual][mostrar]: 
+        jogo.construirtipo = livreto[paginaatual][mostrar]
+        jogo.sobresalas.precoatual = jogo.sobresalas.preco[paginaatual][mostrar]
+    else: jogo.construirtipo = None
 
 def espiar(jogo,lista,registro,pos_vetor):
     

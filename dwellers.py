@@ -4,6 +4,7 @@ from funcoes import empregar_Dw_Cl
 
 from os import path
 from pygame import mixer
+import pytest
 mixer.init()
 
 class morador:   
@@ -182,82 +183,44 @@ def nasceu(jogo,registro,pai,mae):
     mixer.Sound.play(nasceu)
 
 
-
+def competicao(pos_vetor,lista,melhor_cara,melhor_muie,vez):
+    if lista[pos_vetor+vez].morador != None:          #se na segunda tbm tem
+        if lista[pos_vetor+vez].morador.sexo == "M":   #e for homem
+            if melhor_cara[0] != None:             #se o melhor ja foi encontrado
+                if melhor_cara[0].carisma < lista[pos_vetor+vez].morador.carisma: melhor_cara[0] = lista[pos_vetor+vez].morador#foi superado?
+            else: melhor_cara[0] = lista[pos_vetor+vez].morador  #se n foi encontrado, melhor q nada
+        elif lista[pos_vetor+vez].morador.sexo == "F":  #ou for mulher
+            if melhor_muie[0] != None:
+                if melhor_muie[0].carisma < lista[pos_vetor+vez].morador.carisma: melhor_muie[0] = lista[pos_vetor+vez].morador
+            else: melhor_muie[0] = lista[pos_vetor+vez].morador
 
 
 def verificar_gravidez(jogo,lista,registro,pos_vetor):      #MELHORAR AQUI
 
-    melhor_cara = None
-    melhor_muie = None
+    melhor_cara = [None]
+    melhor_muie = [None]
 
     if jogo.moradores >= jogo.lotacao: return
 
     if lista[pos_vetor].morador != None:  #se tem um morador
-        if lista[pos_vetor].morador.sexo == "M": melhor_cara = lista[pos_vetor].morador   #se for cara, e melhor q nada
-        elif lista[pos_vetor].morador.sexo == "F": melhor_muie = lista[pos_vetor].morador #se for muie, e melhor q nada
+        if lista[pos_vetor].morador.sexo == "M": melhor_cara[0] = lista[pos_vetor].morador   #se for cara, e melhor q nada
+        elif lista[pos_vetor].morador.sexo == "F": melhor_muie[0] = lista[pos_vetor].morador #se for muie, e melhor q nada
 
-    if lista[pos_vetor+1].morador != None:          #se na segunda tbm tem
-        if lista[pos_vetor+1].morador.sexo == "M":   #e for homem
-            if melhor_cara != None:             #se o melhor ja foi encontrado
-                if melhor_cara.carisma < lista[pos_vetor+1].morador.carisma: melhor_cara = lista[pos_vetor+1].morador#foi superado?
-            else: melhor_cara = lista[pos_vetor+1].morador  #se n foi encontrado, melhor q nada
-        elif lista[pos_vetor+1].morador.sexo == "F":  #ou for mulher
-            if melhor_muie != None:
-                if melhor_muie.carisma < lista[pos_vetor+1].morador.carisma: melhor_muie = lista[pos_vetor+1].morador
-            else: melhor_muie = lista[pos_vetor+1].morador
+    max = int(lista[pos_vetor].situacao[3]) - 1
+    contador = 1
+    while contador <= max:
+        competicao(pos_vetor,lista,melhor_cara,melhor_muie,contador)
+        contador += 1
 
-    if int(lista[pos_vetor].situacao[3]) >= 4:
-        if lista[pos_vetor+2].morador != None:          #se na segunda tbm tem
-            if lista[pos_vetor+2].morador.sexo == "M":   #e for homem
-                if melhor_cara != None:             #se o melhor ja foi encontrado
-                    if melhor_cara.carisma < lista[pos_vetor+2].morador.carisma: melhor_cara = lista[pos_vetor+2].morador
-                else: melhor_cara = lista[pos_vetor+2].morador  #se n foi encontrado, melhor q nada
-            elif lista[pos_vetor+2].morador.sexo == "F":  #ou for mulher
-                if melhor_muie != None:
-                    if melhor_muie.carisma < lista[pos_vetor+2].morador.carisma: melhor_muie = lista[pos_vetor+2].morador
-                else: melhor_muie = lista[pos_vetor+2].morador
+    if melhor_cara[0] != None and melhor_muie[0] != None:
 
-
-        if lista[pos_vetor+3].morador != None:          #se na segunda tbm tem
-            if lista[pos_vetor+3].morador.sexo == "M":   #e for homem
-                if melhor_cara != None:             #se o melhor ja foi encontrado
-                    if melhor_cara.carisma < lista[pos_vetor+3].morador.carisma: melhor_cara = lista[pos_vetor+3].morador
-                else: melhor_cara = lista[pos_vetor+3].morador  #se n foi encontrado, melhor q nada
-            elif lista[pos_vetor+3].morador.sexo == "F":  #ou for mulher
-                if melhor_muie != None:
-                    if melhor_muie.carisma < lista[pos_vetor+3].morador.carisma: melhor_muie = lista[pos_vetor+3].morador
-                else: melhor_muie = lista[pos_vetor+3].morador
-
-        if int(lista[pos_vetor].situacao[3]) >= 6:
-
-            if lista[pos_vetor+4].morador != None:          #se na segunda tbm tem
-                if lista[pos_vetor+4].morador.sexo == "M":   #e for homem
-                    if melhor_cara != None:             #se o melhor ja foi encontrado
-                        if melhor_cara.carisma < lista[pos_vetor+4].morador.carisma: melhor_cara = lista[pos_vetor+4].morador.carisma
-                    else: melhor_cara = lista[pos_vetor+4].morador  #se n foi encontrado, melhor q nada
-                elif lista[pos_vetor+4].morador.sexo == "F":  #ou for mulher
-                    if melhor_muie != None:
-                        if melhor_muie.carisma < lista[pos_vetor+4].morador.carisma: melhor_muie = lista[pos_vetor+4].morador.carisma
-                    else: melhor_muie = lista[pos_vetor+4].morador
-
-
-            if lista[pos_vetor+5].morador != None:          #se na segunda tbm tem
-                if lista[pos_vetor+5].morador.sexo == "M":   #e for homem
-                    if melhor_cara != None:             #se o melhor ja foi encontrado
-                        if melhor_cara.carisma < lista[pos_vetor+5].morador.carisma: melhor_cara = lista[pos_vetor+5].morador.carisma
-                    else: melhor_cara = lista[pos_vetor+5].morador  #se n foi encontrado, melhor q nada
-                elif lista[pos_vetor+5].morador.sexo == "F":  #ou for mulher
-                    if melhor_muie != None:
-                        if melhor_muie.carisma < lista[pos_vetor+5].morador.carisma: melhor_muie = lista[pos_vetor+5].morador.carisma
-                    else: melhor_muie = lista[pos_vetor+5].morador
-
-    if melhor_cara != None and melhor_muie != None:
+        assert melhor_cara[0].sexo != None          #se nao for none, TEM que ser um morador, e assim ter sexo
         seed()
-        max = (melhor_cara.carisma + melhor_muie.carisma) // 2
+        max = (melhor_cara[0].carisma + melhor_muie[0].carisma) // 2
         max = max * int(lista[pos_vetor].lvl)
         valor = randint(1,50)
         print(valor,"<=",max,"?")
-        if valor >= 1 and valor <= max: nasceu(jogo,registro,melhor_cara,melhor_muie)
+        if valor >= 1 and valor <= max: nasceu(jogo,registro,melhor_cara[0],melhor_muie[0])
 
 
 
